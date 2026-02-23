@@ -19,6 +19,7 @@ import {
   HiOutlineTruck,
   HiOutlineCube,
   HiOutlineDocumentText,
+  HiOutlineClipboardList,
 } from "react-icons/hi";
 import { MdOutlineAccountBalance } from "react-icons/md";
 
@@ -86,6 +87,11 @@ const pinnedItems: NavItem[] = [
     icon: <HiOutlineDocumentText className="w-7 h-7" />,
     name: "Invoices",
     path: "/invoices",
+  },
+  {
+    icon: <HiOutlineClipboardList className="w-7 h-7" />,
+    name: "Bills",
+    path: "/bills",
   },
   {
     icon: <HiOutlineCurrencyDollar className="w-7 h-7" />,
