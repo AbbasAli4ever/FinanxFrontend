@@ -1,11 +1,11 @@
-import ComingSoon from "@/components/common/ComingSoon";
 import { Metadata } from "next";
+import ExpensesPage from "./_components/ExpensesPage";
 
 export const metadata: Metadata = {
   title: "Expenses | FinanX",
-  description: "FinanX Expenses - Coming Soon",
+  description: "Track and manage company expenses",
 };
 
-export default function ExpensesPage() {
-  return <ComingSoon pageName="Expenses" />;
+export default function ExpensesRoute() {
+  return <ExpensesPage />;
 }
