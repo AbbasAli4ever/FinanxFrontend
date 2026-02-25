@@ -1,11 +1,11 @@
-import ComingSoon from "@/components/common/ComingSoon";
 import { Metadata } from "next";
+import ReportsPage from "./_components/ReportsPage";
 
 export const metadata: Metadata = {
   title: "Reports | FinanX",
-  description: "FinanX Reports - Coming Soon",
+  description: "Generate and view financial reports",
 };
 
-export default function ReportsPage() {
-  return <ComingSoon pageName="Reports" />;
+export default function ReportsRoute() {
+  return <ReportsPage />;
 }
