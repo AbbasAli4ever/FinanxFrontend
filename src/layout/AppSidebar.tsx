@@ -21,6 +21,9 @@ import {
   HiOutlineDocumentText,
   HiOutlineClipboardList,
   HiOutlineBookOpen,
+  HiOutlineReceiptRefund,
+  HiOutlineDocumentRemove,
+  HiOutlineDocumentReport,
 } from "react-icons/hi";
 import { MdOutlineAccountBalance } from "react-icons/md";
 
@@ -90,6 +93,11 @@ const pinnedItems: NavItem[] = [
     path: "/invoices",
   },
   {
+    icon: <HiOutlineDocumentReport className="w-7 h-7" />,
+    name: "Estimates",
+    path: "/estimates",
+  },
+  {
     icon: <HiOutlineClipboardList className="w-7 h-7" />,
     name: "Bills",
     path: "/bills",
@@ -103,6 +111,16 @@ const pinnedItems: NavItem[] = [
     icon: <HiOutlineBookOpen className="w-7 h-7" />,
     name: "Journal",
     path: "/journal-entries",
+  },
+  {
+    icon: <HiOutlineReceiptRefund className="w-7 h-7" />,
+    name: "Credits",
+    path: "/credit-notes",
+  },
+  {
+    icon: <HiOutlineDocumentRemove className="w-7 h-7" />,
+    name: "Debits",
+    path: "/debit-notes",
   },
   {
     icon: <HiOutlineUserGroup className="w-7 h-7" />,
