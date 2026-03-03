@@ -24,8 +24,12 @@ import {
   HiOutlineReceiptRefund,
   HiOutlineDocumentRemove,
   HiOutlineDocumentReport,
+  HiOutlineShoppingCart,
+  HiOutlineTag,
+  HiOutlineArchive,
 } from "react-icons/hi";
 import { MdOutlineAccountBalance } from "react-icons/md";
+import { BsBank2 } from "react-icons/bs";
 
 type NavItem = {
   name: string;
@@ -96,6 +100,26 @@ const pinnedItems: NavItem[] = [
     icon: <HiOutlineDocumentReport className="w-7 h-7" />,
     name: "Estimates",
     path: "/estimates",
+  },
+  {
+    icon: <HiOutlineShoppingCart className="w-7 h-7" />,
+    name: "PO",
+    path: "/purchase-orders",
+  },
+  {
+    icon: <HiOutlineTag className="w-7 h-7" />,
+    name: "SO",
+    path: "/sales-orders",
+  },
+  {
+    icon: <HiOutlineArchive className="w-7 h-7" />,
+    name: "Inventory",
+    path: "/inventory",
+  },
+  {
+    icon: <BsBank2 className="w-6 h-6" />,
+    name: "Banking",
+    path: "/banking",
   },
   {
     icon: <HiOutlineClipboardList className="w-7 h-7" />,

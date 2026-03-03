@@ -1,4 +1,171 @@
 // ============================================================
+// QUERY PARAMS
+// ============================================================
+export interface ReportQueryParams {
+  startDate?: string;
+  endDate?: string;
+  asOfDate?: string;
+}
+
+// ============================================================
+// CASH FLOW STATEMENT
+// ============================================================
+export interface CashFlowItem {
+  name: string;
+  accountType: string;
+  amount: number;
+}
+
+export interface CashFlowStatement {
+  period: { startDate: string; endDate: string };
+  operating: {
+    netIncome: number;
+    adjustments: CashFlowItem[];
+    totalAdjustments: number;
+    totalOperating: number;
+  };
+  investing: {
+    items: CashFlowItem[];
+    totalInvesting: number;
+  };
+  financing: {
+    items: CashFlowItem[];
+    totalFinancing: number;
+  };
+  netChangeInCash: number;
+  beginningCash: number;
+  endingCash: number;
+}
+
+// ============================================================
+// AGING BUCKETS (shared)
+// ============================================================
+export interface AgingBuckets {
+  current: number;
+  days1to30: number;
+  days31to60: number;
+  days61to90: number;
+  days91plus: number;
+  total: number;
+}
+
+// ============================================================
+// AR AGING
+// ============================================================
+export interface AgingInvoice {
+  invoiceId: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  dueDate: string | null;
+  totalAmount: number;
+  amountDue: number;
+  daysOverdue: number;
+  bucket: 'current' | 'days1to30' | 'days31to60' | 'days61to90' | 'days91plus';
+}
+
+export interface ArAgingCustomer extends AgingBuckets {
+  customerId: string;
+  customerName: string;
+  invoices: AgingInvoice[];
+}
+
+export interface ArAgingReport {
+  asOfDate: string;
+  customers: ArAgingCustomer[];
+  totals: AgingBuckets;
+}
+
+// ============================================================
+// AP AGING
+// ============================================================
+export interface AgingBill {
+  billId: string;
+  billNumber: string;
+  billDate: string;
+  dueDate: string | null;
+  totalAmount: number;
+  amountDue: number;
+  daysOverdue: number;
+  bucket: 'current' | 'days1to30' | 'days31to60' | 'days61to90' | 'days91plus';
+}
+
+export interface ApAgingVendor extends AgingBuckets {
+  vendorId: string;
+  vendorName: string;
+  bills: AgingBill[];
+}
+
+export interface ApAgingReport {
+  asOfDate: string;
+  vendors: ApAgingVendor[];
+  totals: AgingBuckets;
+}
+
+// ============================================================
+// SALES BY CUSTOMER
+// ============================================================
+export interface SalesCustomer {
+  customerId: string;
+  customerName: string;
+  invoiceCount: number;
+  totalAmount: number;
+  totalPaid: number;
+  totalOutstanding: number;
+}
+
+export interface SalesByCustomerReport {
+  period: { startDate: string | null; endDate: string | null };
+  customers: SalesCustomer[];
+  totals: {
+    invoiceCount: number;
+    totalAmount: number;
+    totalPaid: number;
+    totalOutstanding: number;
+  };
+}
+
+// ============================================================
+// PURCHASES BY VENDOR
+// ============================================================
+export interface PurchasesVendor {
+  vendorId: string;
+  vendorName: string;
+  billCount: number;
+  totalAmount: number;
+  totalPaid: number;
+  totalOutstanding: number;
+}
+
+export interface PurchasesByVendorReport {
+  period: { startDate: string | null; endDate: string | null };
+  vendors: PurchasesVendor[];
+  totals: {
+    billCount: number;
+    totalAmount: number;
+    totalPaid: number;
+    totalOutstanding: number;
+  };
+}
+
+// ============================================================
+// EXPENSE BY CATEGORY
+// ============================================================
+export interface ExpenseCategory {
+  accountId: string;
+  accountNumber: string;
+  accountName: string;
+  accountType: string;
+  amount: number;
+  percentage: number;
+}
+
+export interface ExpenseByCategoryReport {
+  period: { startDate: string | null; endDate: string | null };
+  categories: ExpenseCategory[];
+  total: number;
+}
+
+// ============================================================
 // SHARED
 // ============================================================
 export interface AccountSummary {
