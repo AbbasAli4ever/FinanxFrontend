@@ -166,6 +166,12 @@ export interface CreateInvoiceRequest {
   notes?: string;
   termsAndConditions?: string;
   lineItems: CreateInvoiceLineItemRequest[];
+  isRecurring?: boolean;
+  recurringFrequency?: string;
+  recurringEndDate?: string;
+  projectId?: string;
+  currencyCode?: string;
+  exchangeRate?: number;
 }
 
 export interface UpdateInvoiceRequest {

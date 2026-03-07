@@ -233,6 +233,9 @@ export interface CreateExpenseRequest {
   recurringFrequency?: RecurringFrequency;
   recurringEndDate?: string;
   lineItems?: CreateExpenseLineItemRequest[];
+  projectId?: string;
+  currencyCode?: string;
+  exchangeRate?: number;
 }
 
 export interface UpdateExpenseRequest {
@@ -262,6 +265,7 @@ export interface UpdateExpenseRequest {
   recurringFrequency?: RecurringFrequency;
   recurringEndDate?: string;
   lineItems?: CreateExpenseLineItemRequest[];
+  projectId?: string;
 }
 
 export interface MarkPaidRequest {

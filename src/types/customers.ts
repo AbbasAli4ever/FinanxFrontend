@@ -65,6 +65,7 @@ export interface CreateCustomerRequest {
   openingBalanceDate?: string;
   creditLimit?: number;
   notes?: string;
+  preferredCurrency?: string;
 }
 
 export interface UpdateCustomerRequest {

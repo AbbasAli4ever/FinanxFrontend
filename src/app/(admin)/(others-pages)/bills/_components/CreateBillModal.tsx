@@ -10,9 +10,22 @@ import Alert from "@/components/ui/alert/Alert";
 import { useAuth } from "@/context/AuthContext";
 import billsService from "@/services/billsService";
 import productsService from "@/services/productsService";
+import currencyService from "@/services/currencyService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { PaymentTerms, DiscountType } from "@/types/bills";
 import type { ProductListItem } from "@/types/products";
+import type { RecurringFrequency } from "@/types/recurring";
+import type { Currency } from "@/types/currency";
+import CurrencySelector from "@/components/currency/CurrencySelector";
+
+const RECURRING_FREQUENCIES: { value: RecurringFrequency; label: string }[] = [
+  { value: "DAILY", label: "Daily" },
+  { value: "WEEKLY", label: "Weekly" },
+  { value: "BIWEEKLY", label: "Biweekly" },
+  { value: "MONTHLY", label: "Monthly" },
+  { value: "QUARTERLY", label: "Quarterly" },
+  { value: "YEARLY", label: "Yearly" },
+];
 
 interface LineItem {
   key: string;
@@ -99,6 +112,17 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
   const [discountType, setDiscountType] = useState<DiscountType | "">("");
   const [discountValue, setDiscountValue] = useState("");
 
+  // Recurring
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [recurringFrequency, setRecurringFrequency] = useState<RecurringFrequency>("MONTHLY");
+  const [recurringEndDate, setRecurringEndDate] = useState("");
+
+  // Currency
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
+  const [currencyCode, setCurrencyCode] = useState("USD");
+  const [exchangeRate, setExchangeRate] = useState(1);
+  const [baseCurrencyCode, setBaseCurrencyCode] = useState("USD");
+
   // Line items
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { key: generateKey(), productId: "", expenseAccountId: "", description: "", quantity: 1, unitPrice: 0, discountPercent: 0, taxPercent: 0 },
@@ -119,6 +143,17 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
 
       billsService.getNextNumber(token).then((res) => {
         setBillNumber(res.nextBillNumber);
+      }).catch(() => {});
+
+      // Load currencies
+      currencyService.getList(token).then((list) => {
+        setCurrencies(list);
+        const base = list.find((c) => c.isBaseCurrency);
+        if (base) {
+          setBaseCurrencyCode(base.code);
+          setCurrencyCode(base.code);
+          setExchangeRate(1);
+        }
       }).catch(() => {});
     }
   }, [isOpen, token]);
@@ -192,7 +227,12 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
     setProductSearch("");
     setActiveProductRow(null);
     setShowProductDropdown(false);
-  }, []);
+    setIsRecurring(false);
+    setRecurringFrequency("MONTHLY");
+    setRecurringEndDate("");
+    setCurrencyCode(baseCurrencyCode);
+    setExchangeRate(1);
+  }, [baseCurrencyCode]);
 
   const handleClose = () => {
     resetForm();
@@ -282,6 +322,13 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
               taxPercent: li.taxPercent || undefined,
               sortOrder: idx + 1,
             })),
+          // Recurring fields
+          isRecurring: isRecurring || undefined,
+          recurringFrequency: isRecurring ? recurringFrequency : undefined,
+          recurringEndDate: isRecurring && recurringEndDate ? recurringEndDate : undefined,
+          // Currency fields
+          currencyCode: currencyCode !== baseCurrencyCode ? currencyCode : undefined,
+          exchangeRate: currencyCode !== baseCurrencyCode ? exchangeRate : undefined,
         },
         token
       );
@@ -404,6 +451,17 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
               />
             </div>
           </div>
+
+          {/* Currency */}
+          {currencies.length > 1 && (
+            <CurrencySelector
+              currencies={currencies}
+              currencyCode={currencyCode}
+              exchangeRate={exchangeRate}
+              baseCurrencyCode={baseCurrencyCode}
+              onChange={(code, rate) => { setCurrencyCode(code); setExchangeRate(rate); }}
+            />
+          )}
 
           {/* Line Items */}
           <div>
@@ -625,6 +683,62 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* Recurring */}
+          <div className="rounded-xl border border-gray-200 bg-gray-50/60 p-4 dark:border-gray-700 dark:bg-gray-800/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-500">
+                  <path d="M23 4v6h-6" /><path d="M1 20v-6h6" />
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">Make Recurring</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Auto-clone this bill on a schedule</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsRecurring((v) => !v)}
+                className={`relative h-6 w-11 rounded-full transition-colors duration-200 focus:outline-none ${isRecurring ? "bg-brand-500" : "bg-gray-300 dark:bg-gray-600"}`}
+                role="switch"
+                aria-checked={isRecurring}
+              >
+                <span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${isRecurring ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
+            </div>
+
+            {isRecurring && (
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <Label>Frequency</Label>
+                  <select
+                    value={recurringFrequency}
+                    onChange={(e) => setRecurringFrequency(e.target.value as RecurringFrequency)}
+                    className={selectClasses}
+                  >
+                    {RECURRING_FREQUENCIES.map((f) => (
+                      <option key={f.value} value={f.value}>{f.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <Label>End Date <span className="text-gray-400 text-xs font-normal">(optional)</span></Label>
+                  <Input
+                    type="date"
+                    value={recurringEndDate}
+                    onChange={(e) => setRecurringEndDate(e.target.value)}
+                    placeholder="No end date"
+                  />
+                </div>
+                <div className="col-span-full rounded-lg border border-brand-100 bg-brand-50/60 px-3 py-2.5 dark:border-brand-800 dark:bg-brand-900/10">
+                  <p className="text-xs text-brand-700 dark:text-brand-300">
+                    <strong>How it works:</strong> A clone of this bill will be auto-generated as a DRAFT each time it&apos;s received (via the &apos;Receive&apos; action). The next recurring date advances by the frequency.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Notes & Memo */}

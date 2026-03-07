@@ -27,6 +27,11 @@ import {
   HiOutlineShoppingCart,
   HiOutlineTag,
   HiOutlineArchive,
+  HiOutlineRefresh,
+  HiOutlineClipboardCheck,
+  HiOutlineBriefcase,
+  HiOutlineClock,
+  HiOutlineGlobe,
 } from "react-icons/hi";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { BsBank2 } from "react-icons/bs";
@@ -62,6 +67,21 @@ const navItems: NavItem[] = [
     icon: <HiOutlineChartBar className="w-7 h-7" />,
     name: "Reports",
     path: "/reports",
+  },
+  {
+    icon: <HiOutlineBriefcase className="w-6 h-6" />,
+    name: "Projects",
+    path: "/projects",
+  },
+  {
+    icon: <HiOutlineClock className="w-6 h-6" />,
+    name: "Time",
+    path: "/time-tracking",
+  },
+  {
+    icon: <HiOutlineGlobe className="w-6 h-6" />,
+    name: "Currencies",
+    path: "/currencies",
   },
   {
     icon: <HiOutlineViewGrid className="w-7 h-7" />,
@@ -122,6 +142,11 @@ const pinnedItems: NavItem[] = [
     path: "/banking",
   },
   {
+    icon: <HiOutlineRefresh className="w-6 h-6" />,
+    name: "Recurring",
+    path: "/recurring",
+  },
+  {
     icon: <HiOutlineClipboardList className="w-7 h-7" />,
     name: "Bills",
     path: "/bills",
@@ -155,6 +180,11 @@ const pinnedItems: NavItem[] = [
     icon: <HiOutlineShieldCheck className="w-7 h-7" />,
     name: "Roles",
     path: "/roles",
+  },
+  {
+    icon: <HiOutlineClipboardCheck className="w-7 h-7" />,
+    name: "Audit",
+    path: "/audit-trail",
   },
   {
     icon: <HiOutlineDotsHorizontal className="w-7 h-7" />,

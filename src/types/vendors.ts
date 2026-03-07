@@ -57,6 +57,7 @@ export interface CreateVendorRequest {
   openingBalance?: number;
   openingBalanceDate?: string;
   notes?: string;
+  preferredCurrency?: string;
 }
 
 export interface UpdateVendorRequest {

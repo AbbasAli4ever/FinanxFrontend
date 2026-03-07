@@ -194,6 +194,11 @@ export interface CreateBillRequest {
   notes?: string;
   memo?: string;
   lineItems: CreateBillLineItemRequest[];
+  isRecurring?: boolean;
+  recurringFrequency?: string;
+  recurringEndDate?: string;
+  currencyCode?: string;
+  exchangeRate?: number;
 }
 
 export interface UpdateBillRequest {

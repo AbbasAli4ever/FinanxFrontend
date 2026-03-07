@@ -158,6 +158,8 @@ export interface CreateJournalEntryRequest {
   reversalDate?: string;
   sourceType?: string;
   sourceId?: string;
+  currencyCode?: string;
+  exchangeRate?: number;
 }
 
 export interface UpdateJournalEntryRequest {
