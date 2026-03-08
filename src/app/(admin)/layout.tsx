@@ -2,13 +2,29 @@
 
 import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
-import React from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { isAuthenticated, isReady } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isReady && !isAuthenticated) {
+      router.replace("/signin");
+    }
+  }, [isReady, isAuthenticated, router]);
+
+  // Show nothing while checking auth, or if redirecting
+  if (!isReady || !isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen xl:flex">
       {/* Sidebar */}
