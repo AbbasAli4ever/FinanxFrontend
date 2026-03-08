@@ -43,6 +43,26 @@ export async function getMyPermissions(token: string): Promise<MyPermissionsResp
   });
 }
 
+export async function logout(refreshToken: string): Promise<void> {
+  await request<unknown>(`${API_BASE_URL}/auth/logout`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ refreshToken }),
+  });
+}
+
+export async function refreshAccessToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
+  const res = await request<{ success: boolean; data: { accessToken: string; refreshToken: string } }>(
+    `${API_BASE_URL}/auth/refresh`,
+    {
+      method: "POST",
+      headers: JSON_HEADERS,
+      body: JSON.stringify({ refreshToken }),
+    }
+  );
+  return res.data;
+}
+
 export async function forgotPassword(email: string): Promise<{ success: boolean; message: string; data: { emailSent: boolean } }> {
   return request<{ success: boolean; message: string; data: { emailSent: boolean } }>(
     `${API_BASE_URL}/auth/forgot-password`,

@@ -38,9 +38,39 @@ export function getNetworkErrorMessage(): string {
   return "Unable to connect to the server. Please check your internet connection and ensure the backend is running.";
 }
 
+const REFRESH_TOKEN_KEY = "finanx_refresh_token";
+const ACCESS_TOKEN_KEY = "finanx_access_token";
+
+let isRefreshing = false;
+let refreshQueue: Array<(token: string) => void> = [];
+
+async function doRefresh(): Promise<string> {
+  const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+  if (!refreshToken) throw new Error("No refresh token");
+
+  const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken }),
+  });
+
+  if (!res.ok) throw new Error("Refresh failed");
+
+  const json = await res.json();
+  const { accessToken, refreshToken: newRefreshToken } = json.data as {
+    accessToken: string;
+    refreshToken: string;
+  };
+
+  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
+  return accessToken;
+}
+
 async function request<T>(
   input: RequestInfo,
-  init: RequestInit = {}
+  init: RequestInit = {},
+  _retry = false
 ): Promise<T> {
   try {
     const response = await fetch(input, init);
@@ -49,6 +79,57 @@ async function request<T>(
     const payload = hasJson ? await response.json() : null;
 
     if (!response.ok) {
+      // Auto-refresh on 401 (expired access token) — but not on auth endpoints
+      if (
+        response.status === 401 &&
+        !_retry &&
+        typeof input === "string" &&
+        !input.includes("/auth/login") &&
+        !input.includes("/auth/register") &&
+        !input.includes("/auth/refresh")
+      ) {
+        if (isRefreshing) {
+          // Queue this request until refresh completes
+          return new Promise<T>((resolve, reject) => {
+            refreshQueue.push((newToken: string) => {
+              const newInit = {
+                ...init,
+                headers: {
+                  ...(init.headers as Record<string, string>),
+                  Authorization: `Bearer ${newToken}`,
+                },
+              };
+              request<T>(input, newInit, true).then(resolve).catch(reject);
+            });
+          });
+        }
+
+        isRefreshing = true;
+        try {
+          const newToken = await doRefresh();
+          // Flush queued requests
+          refreshQueue.forEach((cb) => cb(newToken));
+          refreshQueue = [];
+
+          const newInit = {
+            ...init,
+            headers: {
+              ...(init.headers as Record<string, string>),
+              Authorization: `Bearer ${newToken}`,
+            },
+          };
+          return request<T>(input, newInit, true);
+        } catch {
+          refreshQueue = [];
+          localStorage.removeItem(ACCESS_TOKEN_KEY);
+          localStorage.removeItem(REFRESH_TOKEN_KEY);
+          window.location.replace("/signin");
+          throw new ApiError("Session expired. Please sign in again.", 401);
+        } finally {
+          isRefreshing = false;
+        }
+      }
+
       throw toApiError(response.status, payload);
     }
 

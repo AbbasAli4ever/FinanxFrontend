@@ -11,7 +11,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated, isReady } = useAuth();
+  const { isAuthenticated, isReady, token } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -20,20 +20,21 @@ export default function AdminLayout({
     }
   }, [isReady, isAuthenticated, router]);
 
-  // Show nothing while checking auth, or if redirecting
-  if (!isReady || !isAuthenticated) {
+  // Still verifying token with backend — show nothing
+  if (!isReady) {
+    return null;
+  }
+
+  // Auth check done, not authenticated — show nothing while redirect fires
+  if (!token || !isAuthenticated) {
     return null;
   }
 
   return (
     <div className="min-h-screen xl:flex">
-      {/* Sidebar */}
       <AppSidebar />
-      {/* Main Content Area */}
       <div className="flex-1 ml-[90px]">
-        {/* Header */}
         <AppHeader />
-        {/* Page Content */}
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">{children}</div>
       </div>
     </div>

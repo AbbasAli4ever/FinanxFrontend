@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { getMe, login as loginRequest, register as registerRequest } from "@/services/authService";
+import { getMe, login as loginRequest, logout as logoutRequest, register as registerRequest } from "@/services/authService";
 import type { AuthUser, LoginRequest, RegisterRequest } from "@/types/auth";
 
 const ACCESS_TOKEN_KEY = "finanx_access_token";
@@ -53,11 +53,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const logout = useCallback(() => {
+    const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+    // Fire-and-forget — invalidate refresh token on backend
+    if (storedRefreshToken) {
+      logoutRequest(storedRefreshToken).catch(() => {});
+    }
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     setUser(null);
     setToken(null);
     setIsReady(true);
+    window.location.replace("/signin");
   }, []);
 
   useEffect(() => {
