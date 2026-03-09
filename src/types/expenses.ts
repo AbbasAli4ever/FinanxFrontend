@@ -23,7 +23,8 @@ export type PaymentMethod =
   | "OTHER";
 
 export interface ExpenseStatusInfo {
-  key: string;
+  key?: string;
+  value?: string;
   label: string;
   color: string;
   description: string;
