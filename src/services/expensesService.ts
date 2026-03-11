@@ -51,12 +51,9 @@ const expensesService = {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = response.data;
-    console.log("[expensesService] getStatuses raw response:", data);
-    // Backend returns an array — convert to keyed map by status key
+    // Backend returns an array — convert to keyed map using value field
     if (Array.isArray(data)) {
-      const mapped = Object.fromEntries(data.map((s) => [s.key ?? s.value, s]));
-      console.log("[expensesService] getStatuses mapped:", mapped);
-      return mapped;
+      return Object.fromEntries(data.map((s) => [s.key ?? s.value, s]));
     }
     return data;
   },

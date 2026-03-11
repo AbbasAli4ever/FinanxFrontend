@@ -32,6 +32,10 @@ import {
   HiOutlineBriefcase,
   HiOutlineClock,
   HiOutlineGlobe,
+  HiOutlineUpload,
+  HiOutlineSearch,
+  HiOutlineReceiptTax,
+  HiOutlineBell,
 } from "react-icons/hi";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { BsBank2 } from "react-icons/bs";
@@ -82,6 +86,26 @@ const navItems: NavItem[] = [
     icon: <HiOutlineGlobe className="w-6 h-6" />,
     name: "Currencies",
     path: "/currencies",
+  },
+  {
+    icon: <HiOutlineUpload className="w-6 h-6" />,
+    name: "Data I/O",
+    path: "/data-io",
+  },
+  {
+    icon: <HiOutlineSearch className="w-6 h-6" />,
+    name: "Search",
+    path: "/search",
+  },
+  {
+    icon: <HiOutlineReceiptTax className="w-6 h-6" />,
+    name: "Taxes",
+    path: "/tax-management",
+  },
+  {
+    icon: <HiOutlineBell className="w-6 h-6" />,
+    name: "Alerts",
+    path: "/notifications",
   },
   {
     icon: <HiOutlineViewGrid className="w-7 h-7" />,

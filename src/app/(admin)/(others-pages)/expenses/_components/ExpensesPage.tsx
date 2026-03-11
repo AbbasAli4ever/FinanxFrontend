@@ -145,10 +145,9 @@ const ExpensesPage: React.FC = () => {
     if (!token) return;
     try {
       const data = await expensesService.getStatuses(token);
-      console.log("[ExpensesPage] statusMap set to:", data);
       setStatusMap(data);
-    } catch (err) {
-      console.error("[ExpensesPage] getStatuses failed:", err);
+    } catch {
+      // Non-critical
     }
   }, [token]);
 
