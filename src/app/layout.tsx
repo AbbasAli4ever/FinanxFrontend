@@ -1,4 +1,4 @@
-import { Outfit } from 'next/font/google';
+import { Lato } from 'next/font/google';
 import './globals.css';
 import "flatpickr/dist/flatpickr.css";
 import { SidebarProvider } from '@/context/SidebarContext';
@@ -6,8 +6,10 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { PermissionsProvider } from '@/context/PermissionsContext';
 
-const outfit = Outfit({
+const lato = Lato({
   subsets: ["latin"],
+  weight: ["400", "700", "900"],
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -17,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${outfit.className} dark:bg-gray-900`} suppressHydrationWarning>
+      <body className={`${lato.className} dark:bg-gray-900`} suppressHydrationWarning>
         <ThemeProvider>
           <AuthProvider>
             <PermissionsProvider>

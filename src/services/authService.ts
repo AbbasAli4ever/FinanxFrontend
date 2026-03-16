@@ -2,6 +2,8 @@ import {
   AuthResponse,
   CurrentUserResponse,
   LoginRequest,
+  LoginResponse,
+  MyCompaniesResponse,
   MyPermissionsResponse,
   RegisterRequest,
 } from "@/types/auth";
@@ -15,13 +17,67 @@ export async function register(data: RegisterRequest): Promise<AuthResponse> {
   });
 }
 
-export async function login(data: LoginRequest): Promise<AuthResponse> {
-  return request<AuthResponse>(`${API_BASE_URL}/auth/login`, {
+export async function login(data: LoginRequest): Promise<LoginResponse> {
+  return request<LoginResponse>(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     headers: JSON_HEADERS,
     body: JSON.stringify(data),
   });
 }
+
+export async function selectCompany(tempToken: string, companyId: string): Promise<AuthResponse> {
+  return request<AuthResponse>(`${API_BASE_URL}/auth/select-company`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ tempToken, companyId }),
+  });
+}
+
+export async function getMyCompanies(token: string): Promise<MyCompaniesResponse> {
+  return request<MyCompaniesResponse>(`${API_BASE_URL}/auth/my-companies`, {
+    method: "GET",
+    headers: {
+      ...JSON_HEADERS,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export async function switchCompany(token: string, companyId: string): Promise<AuthResponse> {
+  return request<AuthResponse>(`${API_BASE_URL}/auth/switch-company`, {
+    method: "POST",
+    headers: {
+      ...JSON_HEADERS,
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ companyId }),
+  });
+}
+
+export async function createCompany(
+  token: string,
+  data: { companyName: string; companyEmail?: string }
+): Promise<AuthResponse> {
+  return request<AuthResponse>(`${API_BASE_URL}/auth/create-company`, {
+    method: "POST",
+    headers: {
+      ...JSON_HEADERS,
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+// export async function createCompanyWithTemp(
+//   tempToken: string,
+//   data: { companyName: string; companyEmail?: string }
+// ): Promise<AuthResponse> {
+//   return request<AuthResponse>(`${API_BASE_URL}/auth/create-company-with-temp`, {
+//     method: "POST",
+//     headers: JSON_HEADERS,
+//     body: JSON.stringify({ tempToken, ...data }),
+//   });
+// }
 
 export async function getMe(token: string): Promise<CurrentUserResponse> {
   return request<CurrentUserResponse>(`${API_BASE_URL}/auth/me`, {

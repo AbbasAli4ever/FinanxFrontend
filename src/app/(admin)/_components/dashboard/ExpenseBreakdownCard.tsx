@@ -16,7 +16,7 @@ import {
 import type { ExpenseBreakdown } from "@/types/dashboard";
 
 const CAT_COLORS = [
-  "#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444",
+  "#6A89A7", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444",
   "#06B6D4", "#EC4899", "#84CC16", "#F97316", "#6B7280",
 ];
 
@@ -31,7 +31,7 @@ const CatTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.length) return null;
   const d = payload[0];
   return (
-    <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+    <div className="rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <p className="text-xs font-semibold text-gray-700 dark:text-white">{d.name}</p>
       <p className="text-xs text-gray-500 dark:text-gray-400">{fmt(d.value)} · {d.payload.percentage?.toFixed(1)}%</p>
     </div>
@@ -42,7 +42,7 @@ const CatTooltip = ({ active, payload }: any) => {
 const TrendTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+    <div className="rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <p className="mb-1 text-xs font-semibold text-gray-500 dark:text-gray-400">{label}</p>
       <p className="text-xs font-bold text-gray-900 dark:text-white">{fmt(payload[0].value)}</p>
     </div>
@@ -68,16 +68,16 @@ const ExpenseBreakdownCard: React.FC<Props> = ({ data, loading }) => {
   })) ?? [];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-error-50 dark:bg-error-900/20">
+        <div className="flex h-8 w-8 items-center justify-center rounded bg-error-50 dark:bg-error-900/20">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2">
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="12" />
             <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
         </div>
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Expense Breakdown</h3>
+        <h3 className="text-[14px] font-semibold text-gray-900 dark:text-white">Expense Breakdown</h3>
         {data && (
           <span className="ml-auto text-sm font-semibold text-gray-700 dark:text-gray-200">
             {fmt(data.totalExpenses)} total
@@ -88,7 +88,7 @@ const ExpenseBreakdownCard: React.FC<Props> = ({ data, loading }) => {
       {loading || !data ? (
         <div className="space-y-4">
           <div className="mx-auto h-36 w-36 animate-pulse rounded-full bg-gray-100 dark:bg-gray-800" />
-          <div className="h-24 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+          <div className="h-24 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
         </div>
       ) : (
         <div className="flex flex-col gap-4">

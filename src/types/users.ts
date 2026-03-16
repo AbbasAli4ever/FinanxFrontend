@@ -79,9 +79,21 @@ export interface ChangePasswordRequest {
   newPassword: string;
 }
 
+export interface ValidateInvitationData {
+  valid: boolean;
+  message?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  company?: { id: string; name: string };
+  role?: { id: string; code: string; name: string };
+  existingUser?: boolean;
+  expiresAt?: string;
+}
+
 export interface AcceptInvitationRequest {
   invitationToken: string;
-  password: string;
+  password?: string; // Optional — not needed for existing users
 }
 
 export interface UpdateUserRequest {

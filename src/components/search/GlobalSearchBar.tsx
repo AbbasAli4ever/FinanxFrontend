@@ -356,17 +356,17 @@ export default function GlobalSearchBar({ inputRef }: GlobalSearchBarProps) {
     <div ref={containerRef} className="relative">
       {/* Input */}
       <div className="relative">
-        <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
+        <span className="absolute -translate-y-1/2 left-2.5 top-1/2 pointer-events-none">
           {loading ? (
-            <svg className="w-5 h-5 text-brand-500 animate-spin" fill="none" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-brand-500 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
             </svg>
           ) : (
             <svg
               className="fill-gray-500 dark:fill-gray-400"
-              width="20"
-              height="20"
+              width="16"
+              height="16"
               viewBox="0 0 20 20"
               fill="none"
             >
@@ -390,7 +390,7 @@ export default function GlobalSearchBar({ inputRef }: GlobalSearchBarProps) {
             if (data && query.trim().length >= 2) setOpen(true);
           }}
           placeholder="Search customers, invoices, products..."
-          className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-20 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
+          className="h-8 w-full rounded border border-gray-200 bg-transparent py-0 pl-9 pr-16 text-[13px] text-gray-800 placeholder:text-gray-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-600 xl:w-[360px]"
         />
 
         <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
@@ -409,10 +409,10 @@ export default function GlobalSearchBar({ inputRef }: GlobalSearchBarProps) {
             </button>
           )}
           {!query && (
-            <button className="inline-flex items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
+            <span className="inline-flex items-center gap-0.5 rounded border border-gray-200 bg-gray-50 px-1 py-0.5 text-[10px] leading-none text-gray-400 dark:border-gray-700 dark:bg-white/[0.03] dark:text-gray-500">
               <span>⌘</span>
               <span>K</span>
-            </button>
+            </span>
           )}
         </div>
       </div>

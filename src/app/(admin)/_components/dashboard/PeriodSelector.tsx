@@ -32,7 +32,7 @@ const PeriodSelector: React.FC<Props> = ({ value, onChange }) => {
             endDate: undefined,
           })
         }
-        className="h-9 rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"
+        className="h-9 rounded border border-gray-300 bg-white px-3 text-[13px] font-medium text-gray-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors dark:border-gray-600 dark:bg-gray-800 dark:text-white/90"
       >
         {PRESETS.map((p) => (
           <option key={p.value} value={p.value}>
@@ -47,14 +47,14 @@ const PeriodSelector: React.FC<Props> = ({ value, onChange }) => {
             type="date"
             value={value.startDate ?? ""}
             onChange={(e) => onChange({ ...value, startDate: e.target.value })}
-            className="h-9 rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"
+            className="h-9 rounded border border-gray-300 bg-white px-3 text-[13px] text-gray-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors dark:border-gray-600 dark:bg-gray-800 dark:text-white/90"
           />
-          <span className="text-gray-400 text-sm">to</span>
+          <span className="text-[13px] text-gray-400">to</span>
           <input
             type="date"
             value={value.endDate ?? ""}
             onChange={(e) => onChange({ ...value, endDate: e.target.value })}
-            className="h-9 rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"
+            className="h-9 rounded border border-gray-300 bg-white px-3 text-[13px] text-gray-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors dark:border-gray-600 dark:bg-gray-800 dark:text-white/90"
           />
         </>
       )}

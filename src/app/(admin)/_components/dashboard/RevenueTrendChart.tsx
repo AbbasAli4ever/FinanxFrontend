@@ -23,7 +23,7 @@ function fmtY(v: number): string {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+    <div className="rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <p className="mb-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400">{label}</p>
       {payload.map((p: { name: string; value: number; color: string }) => (
         <div key={p.name} className="flex items-center gap-2">
@@ -42,17 +42,17 @@ interface Props {
 }
 
 const RevenueTrendChart: React.FC<Props> = ({ data, loading }) => (
-  <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-    <div className="mb-5 flex items-center justify-between">
+  <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="mb-4 flex items-center justify-between">
       <div>
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Revenue vs Expenses</h3>
+        <h3 className="text-[14px] font-semibold text-gray-900 dark:text-white">Revenue vs Expenses</h3>
         <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Rolling 12-month trend</p>
       </div>
     </div>
 
     {loading || !data ? (
       <div className="flex h-64 items-center justify-center">
-        <div className="h-48 w-full animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+        <div className="h-48 w-full animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
       </div>
     ) : (
       <ResponsiveContainer width="100%" height={280}>
@@ -82,10 +82,10 @@ const RevenueTrendChart: React.FC<Props> = ({ data, loading }) => (
             type="monotone"
             dataKey="revenue"
             name="Revenue"
-            stroke="#3B82F6"
+            stroke="#6A89A7"
             strokeWidth={2.5}
             dot={false}
-            activeDot={{ r: 5, fill: "#3B82F6" }}
+            activeDot={{ r: 5, fill: "#6A89A7" }}
           />
           <Line
             type="monotone"

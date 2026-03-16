@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/swiftninedev/Desktop/NewProjects/myProjects/FinanX/FinanX -maxdepth 2 -name tailwind* -type f)",
+      "Bash(ls -la /Users/swiftninedev/Desktop/NewProjects/myProjects/FinanX/FinanX/*.*)",
+      "Bash(ls -la \"/Users/swiftninedev/Desktop/NewProjects/myProjects/FinanX/FinanX/src/app/\\(admin\\)/_components/\")",
+      "Bash(find \"/Users/swiftninedev/Desktop/NewProjects/myProjects/FinanX/FinanX/src/app/\\(admin\\)/_components/dashboard\" -type f -name \"*.tsx\")",
+      "Bash(find \"/Users/swiftninedev/Desktop/NewProjects/myProjects/FinanX/FinanX/src/app/\\(admin\\)/\\(others-pages\\)\" -type f -name \"*.tsx\")"
+    ]
+  }
+}

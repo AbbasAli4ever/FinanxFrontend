@@ -22,7 +22,7 @@ function fmt(n: number): string {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+    <div className="rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <p className="mb-1 text-xs font-semibold text-gray-700 dark:text-white">{label}</p>
       {payload.map((p: { name: string; value: number; fill: string }) => (
         <div key={p.name} className="flex items-center gap-2">
@@ -51,9 +51,9 @@ const TopVendorsChart: React.FC<Props> = ({ data, loading }) => {
   })) ?? [];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-50 dark:bg-warning-900/20">
+        <div className="flex h-8 w-8 items-center justify-center rounded bg-warning-50 dark:bg-warning-900/20">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2">
             <path d="M1 3h15v13H1z" />
             <path d="M16 8h4l3 3v5h-7V8z" />
@@ -61,11 +61,11 @@ const TopVendorsChart: React.FC<Props> = ({ data, loading }) => {
             <circle cx="18.5" cy="18.5" r="2.5" />
           </svg>
         </div>
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Top Vendors</h3>
+        <h3 className="text-[14px] font-semibold text-gray-900 dark:text-white">Top Vendors</h3>
       </div>
 
       {loading || !data ? (
-        <div className="h-56 w-full animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+        <div className="h-56 w-full animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
       ) : chartData.length === 0 ? (
         <p className="py-12 text-center text-sm text-gray-400">No vendor data for this period</p>
       ) : (
@@ -96,7 +96,7 @@ const TopVendorsChart: React.FC<Props> = ({ data, loading }) => {
             {data.vendors.slice(0, 5).map((v, i) => (
               <div key={v.vendorId} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-warning-100 text-[10px] font-bold text-warning-700 dark:bg-warning-900/30 dark:text-warning-300">
+                  <span className="flex h-5 w-5 items-center justify-center rounded bg-warning-100 text-[10px] font-bold text-warning-700 dark:bg-warning-900/30 dark:text-warning-300">
                     {i + 1}
                   </span>
                   <span className="font-medium text-gray-700 dark:text-gray-200">{v.vendorName}</span>

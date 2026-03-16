@@ -97,7 +97,10 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  // Fetch permissions when auth state is ready and user is authenticated
+  // Fetch permissions when auth state is ready and user is authenticated.
+  // Depend only on token (not fetchPermissions) — fetchPermissions is stable
+  // relative to token changes and including it causes a double-fire because
+  // both token and fetchPermissions change simultaneously when switching companies.
   useEffect(() => {
     if (!isReady) return;
 
@@ -113,7 +116,8 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({
         sessionStorage.removeItem(PERMISSIONS_STORAGE_KEY);
       }
     }
-  }, [isReady, isAuthenticated, token, fetchPermissions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, isAuthenticated, token]);
 
   const hasPermission = useCallback(
     (permission: string): boolean => {

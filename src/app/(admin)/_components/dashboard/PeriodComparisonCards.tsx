@@ -55,15 +55,15 @@ const PeriodComparisonCards: React.FC<Props> = ({ data, loading }) => {
     new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-900/20">
+          <div className="flex h-8 w-8 items-center justify-center rounded bg-purple-50 dark:bg-purple-900/20">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
           </div>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Period Comparison</h3>
+          <h3 className="text-[14px] font-semibold text-gray-900 dark:text-white">Period Comparison</h3>
         </div>
         {data && !loading && (
           <div className="flex items-center gap-3 text-xs text-gray-400">
@@ -83,7 +83,7 @@ const PeriodComparisonCards: React.FC<Props> = ({ data, loading }) => {
       {loading || !data ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
           {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-            <div key={i} className="h-24 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+            <div key={i} className="h-24 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
           ))}
         </div>
       ) : (
@@ -94,7 +94,7 @@ const PeriodComparisonCards: React.FC<Props> = ({ data, loading }) => {
             return (
               <div
                 key={m.key}
-                className="rounded-xl border border-gray-100 bg-gray-50/60 p-3 dark:border-gray-700/60 dark:bg-gray-800/40"
+                className="rounded border border-gray-100 bg-gray-50/60 p-3 dark:border-gray-700/60 dark:bg-gray-800/40"
               >
                 <p className="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">
                   {m.label}

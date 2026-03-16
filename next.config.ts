@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // React Strict Mode double-invokes effects in development to surface side-effect bugs.
+  // Disabled here to prevent double API calls during dev; re-enable periodically to audit.
+  reactStrictMode: false,
+
   // Disable image optimization
   images: {
     unoptimized: true,

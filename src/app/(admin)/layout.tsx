@@ -33,9 +33,9 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen xl:flex">
       <AppSidebar />
-      <div className="flex-1 ml-[90px]">
+      <div className="flex-1 ml-[72px]">
         <AppHeader />
-        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">{children}</div>
+        <div className="">{children}</div>
       </div>
     </div>
   );

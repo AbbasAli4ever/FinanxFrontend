@@ -26,7 +26,7 @@ function fmtDate(d: string): string {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+    <div className="rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <p className="mb-1 text-xs font-semibold text-gray-500 dark:text-gray-400">{label}</p>
       {payload.map((p: { name: string; value: number; fill: string }) => (
         <div key={p.name} className="flex items-center gap-2">
@@ -53,15 +53,15 @@ const CashFlowCard: React.FC<Props> = ({ data, loading }) => {
   })) ?? [];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-900/20">
+        <div className="flex h-8 w-8 items-center justify-center rounded bg-purple-50 dark:bg-purple-900/20">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2">
             <rect x="2" y="5" width="20" height="14" rx="2" />
             <path d="M2 10h20" />
           </svg>
         </div>
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Cash Flow</h3>
+        <h3 className="text-[14px] font-semibold text-gray-900 dark:text-white">Cash Flow</h3>
         <span className="ml-auto text-xs text-gray-400">Last 30 days</span>
       </div>
 
@@ -69,7 +69,7 @@ const CashFlowCard: React.FC<Props> = ({ data, loading }) => {
       {loading || !data ? (
         <div className="mb-4 space-y-2">
           {[1, 2].map((i) => (
-            <div key={i} className="h-12 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+            <div key={i} className="h-12 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
           ))}
         </div>
       ) : (
@@ -77,7 +77,7 @@ const CashFlowCard: React.FC<Props> = ({ data, loading }) => {
           {data.bankAccounts.map((acc) => (
             <div
               key={acc.accountId}
-              className="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-800/60"
+              className="flex items-center justify-between rounded bg-gray-50 px-3 py-2.5 dark:bg-gray-800/60"
             >
               <div>
                 <p className="text-xs font-medium text-gray-800 dark:text-white">{acc.name}</p>
@@ -88,7 +88,7 @@ const CashFlowCard: React.FC<Props> = ({ data, loading }) => {
               <p className="text-sm font-bold text-gray-900 dark:text-white">{fmt(acc.currentBalance)}</p>
             </div>
           ))}
-          <div className="flex items-center justify-between rounded-xl bg-brand-50 px-3 py-2 dark:bg-brand-900/20">
+          <div className="flex items-center justify-between rounded bg-brand-50 px-3 py-2 dark:bg-brand-900/20">
             <p className="text-xs font-semibold text-brand-700 dark:text-brand-300">Total Cash</p>
             <p className="text-sm font-bold text-brand-700 dark:text-brand-300">{fmt(data.totalCashBalance)}</p>
           </div>
@@ -98,15 +98,15 @@ const CashFlowCard: React.FC<Props> = ({ data, loading }) => {
       {/* 30-day stats */}
       {!loading && data && (
         <div className="mb-4 grid grid-cols-3 gap-2">
-          <div className="rounded-xl bg-success-50/60 p-2.5 text-center dark:bg-success-900/20">
+          <div className="rounded bg-success-50/60 p-2.5 text-center dark:bg-success-900/20">
             <p className="text-[10px] uppercase tracking-wide text-success-600 dark:text-success-400">In</p>
             <p className="text-sm font-bold text-success-700 dark:text-success-300">{fmt(data.last30Days.totalInflow)}</p>
           </div>
-          <div className="rounded-xl bg-error-50/60 p-2.5 text-center dark:bg-error-900/20">
+          <div className="rounded bg-error-50/60 p-2.5 text-center dark:bg-error-900/20">
             <p className="text-[10px] uppercase tracking-wide text-error-600 dark:text-error-400">Out</p>
             <p className="text-sm font-bold text-error-700 dark:text-error-300">{fmt(data.last30Days.totalOutflow)}</p>
           </div>
-          <div className={`rounded-xl p-2.5 text-center ${data.last30Days.netCashFlow >= 0 ? "bg-brand-50/60 dark:bg-brand-900/20" : "bg-warning-50/60 dark:bg-warning-900/20"}`}>
+          <div className={`rounded p-2.5 text-center ${data.last30Days.netCashFlow >= 0 ? "bg-brand-50/60 dark:bg-brand-900/20" : "bg-warning-50/60 dark:bg-warning-900/20"}`}>
             <p className={`text-[10px] uppercase tracking-wide ${data.last30Days.netCashFlow >= 0 ? "text-brand-600 dark:text-brand-400" : "text-warning-600 dark:text-warning-400"}`}>Net</p>
             <p className={`text-sm font-bold ${data.last30Days.netCashFlow >= 0 ? "text-brand-700 dark:text-brand-300" : "text-warning-700 dark:text-warning-300"}`}>
               {data.last30Days.netCashFlow >= 0 ? "+" : ""}{fmt(data.last30Days.netCashFlow)}
@@ -117,7 +117,7 @@ const CashFlowCard: React.FC<Props> = ({ data, loading }) => {
 
       {/* Daily flow chart */}
       {loading || !data ? (
-        <div className="h-32 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+        <div className="h-32 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
       ) : chartData.length > 0 ? (
         <ResponsiveContainer width="100%" height={140}>
           <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>

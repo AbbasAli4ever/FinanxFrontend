@@ -39,6 +39,8 @@ import {
 } from "react-icons/hi";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { BsBank2 } from "react-icons/bs";
+import UserDropdown from "@/components/header/UserDropdown";
+import CompanySwitcher from "@/components/company/CompanySwitcher";
 
 type NavItem = {
   name: string;
@@ -47,245 +49,135 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  {
-    icon: <HiOutlinePlusCircle className="w-7 h-7" />,
-    name: "Create",
-    path: "/create",
-  },
-  {
-    icon: <HiOutlineBookmark className="w-7 h-7" />,
-    name: "Bookmarks",
-    path: "/bookmarks",
-  },
-  {
-    icon: <HiOutlineHome className="w-7 h-7" />,
-    name: "Home",
-    path: "/",
-  },
-  {
-    icon: <HiOutlineSparkles className="w-7 h-7" />,
-    name: "Feed",
-    path: "/feed",
-  },
-  {
-    icon: <HiOutlineChartBar className="w-7 h-7" />,
-    name: "Reports",
-    path: "/reports",
-  },
-  {
-    icon: <HiOutlineBriefcase className="w-6 h-6" />,
-    name: "Projects",
-    path: "/projects",
-  },
-  {
-    icon: <HiOutlineClock className="w-6 h-6" />,
-    name: "Time",
-    path: "/time-tracking",
-  },
-  {
-    icon: <HiOutlineGlobe className="w-6 h-6" />,
-    name: "Currencies",
-    path: "/currencies",
-  },
-  {
-    icon: <HiOutlineUpload className="w-6 h-6" />,
-    name: "Data I/O",
-    path: "/data-io",
-  },
-  {
-    icon: <HiOutlineSearch className="w-6 h-6" />,
-    name: "Search",
-    path: "/search",
-  },
-  {
-    icon: <HiOutlineReceiptTax className="w-6 h-6" />,
-    name: "Taxes",
-    path: "/tax-management",
-  },
-  {
-    icon: <HiOutlineBell className="w-6 h-6" />,
-    name: "Alerts",
-    path: "/notifications",
-  },
-  {
-    icon: <HiOutlineViewGrid className="w-7 h-7" />,
-    name: "All apps",
-    path: "/all-apps",
-  },
+  { icon: <HiOutlinePlusCircle className="w-[18px] h-[18px]" />, name: "Create", path: "/create" },
+  { icon: <HiOutlineBookmark className="w-[18px] h-[18px]" />, name: "Bookmarks", path: "/bookmarks" },
+  { icon: <HiOutlineHome className="w-[18px] h-[18px]" />, name: "Home", path: "/" },
+  { icon: <HiOutlineSparkles className="w-[18px] h-[18px]" />, name: "Feed", path: "/feed" },
+  { icon: <HiOutlineChartBar className="w-[18px] h-[18px]" />, name: "Reports", path: "/reports" },
+  { icon: <HiOutlineBriefcase className="w-[18px] h-[18px]" />, name: "Projects", path: "/projects" },
+  { icon: <HiOutlineClock className="w-[18px] h-[18px]" />, name: "Time", path: "/time-tracking" },
+  { icon: <HiOutlineGlobe className="w-[18px] h-[18px]" />, name: "Currencies", path: "/currencies" },
+  { icon: <HiOutlineUpload className="w-[18px] h-[18px]" />, name: "Data I/O", path: "/data-io" },
+  { icon: <HiOutlineSearch className="w-[18px] h-[18px]" />, name: "Search", path: "/search" },
+  { icon: <HiOutlineReceiptTax className="w-[18px] h-[18px]" />, name: "Taxes", path: "/tax-management" },
+  { icon: <HiOutlineBell className="w-[18px] h-[18px]" />, name: "Alerts", path: "/notifications" },
+  { icon: <HiOutlineViewGrid className="w-[18px] h-[18px]" />, name: "All Apps", path: "/all-apps" },
 ];
 
 const pinnedItems: NavItem[] = [
-  {
-    icon: <MdOutlineAccountBalance className="w-7 h-7" />,
-    name: "Accounting",
-    path: "/accounting",
-  },
-  {
-    icon: <HiOutlineIdentification className="w-7 h-7" />,
-    name: "Customers",
-    path: "/customers",
-  },
-  {
-    icon: <HiOutlineTruck className="w-7 h-7" />,
-    name: "Vendors",
-    path: "/vendors",
-  },
-  {
-    icon: <HiOutlineCube className="w-7 h-7" />,
-    name: "Products",
-    path: "/products",
-  },
-  {
-    icon: <HiOutlineDocumentText className="w-7 h-7" />,
-    name: "Invoices",
-    path: "/invoices",
-  },
-  {
-    icon: <HiOutlineDocumentReport className="w-7 h-7" />,
-    name: "Estimates",
-    path: "/estimates",
-  },
-  {
-    icon: <HiOutlineShoppingCart className="w-7 h-7" />,
-    name: "PO",
-    path: "/purchase-orders",
-  },
-  {
-    icon: <HiOutlineTag className="w-7 h-7" />,
-    name: "SO",
-    path: "/sales-orders",
-  },
-  {
-    icon: <HiOutlineArchive className="w-7 h-7" />,
-    name: "Inventory",
-    path: "/inventory",
-  },
-  {
-    icon: <BsBank2 className="w-6 h-6" />,
-    name: "Banking",
-    path: "/banking",
-  },
-  {
-    icon: <HiOutlineRefresh className="w-6 h-6" />,
-    name: "Recurring",
-    path: "/recurring",
-  },
-  {
-    icon: <HiOutlineClipboardList className="w-7 h-7" />,
-    name: "Bills",
-    path: "/bills",
-  },
-  {
-    icon: <HiOutlineCurrencyDollar className="w-7 h-7" />,
-    name: "Expenses",
-    path: "/expenses",
-  },
-  {
-    icon: <HiOutlineBookOpen className="w-7 h-7" />,
-    name: "Journal",
-    path: "/journal-entries",
-  },
-  {
-    icon: <HiOutlineReceiptRefund className="w-7 h-7" />,
-    name: "Credits",
-    path: "/credit-notes",
-  },
-  {
-    icon: <HiOutlineDocumentRemove className="w-7 h-7" />,
-    name: "Debits",
-    path: "/debit-notes",
-  },
-  {
-    icon: <HiOutlineUserGroup className="w-7 h-7" />,
-    name: "Users",
-    path: "/users",
-  },
-  {
-    icon: <HiOutlineShieldCheck className="w-7 h-7" />,
-    name: "Roles",
-    path: "/roles",
-  },
-  {
-    icon: <HiOutlineClipboardCheck className="w-7 h-7" />,
-    name: "Audit",
-    path: "/audit-trail",
-  },
-  {
-    icon: <HiOutlineDotsHorizontal className="w-7 h-7" />,
-    name: "More",
-    path: "/more",
-  },
-  {
-    icon: <HiOutlineAdjustments className="w-7 h-7" />,
-    name: "Customise",
-    path: "/customise",
-  },
+  { icon: <MdOutlineAccountBalance className="w-[18px] h-[18px]" />, name: "Accounting", path: "/accounting" },
+  { icon: <HiOutlineIdentification className="w-[18px] h-[18px]" />, name: "Customers", path: "/customers" },
+  { icon: <HiOutlineTruck className="w-[18px] h-[18px]" />, name: "Vendors", path: "/vendors" },
+  { icon: <HiOutlineCube className="w-[18px] h-[18px]" />, name: "Products", path: "/products" },
+  { icon: <HiOutlineDocumentText className="w-[18px] h-[18px]" />, name: "Invoices", path: "/invoices" },
+  { icon: <HiOutlineDocumentReport className="w-[18px] h-[18px]" />, name: "Estimates", path: "/estimates" },
+  { icon: <HiOutlineShoppingCart className="w-[18px] h-[18px]" />, name: "PO", path: "/purchase-orders" },
+  { icon: <HiOutlineTag className="w-[18px] h-[18px]" />, name: "SO", path: "/sales-orders" },
+  { icon: <HiOutlineArchive className="w-[18px] h-[18px]" />, name: "Inventory", path: "/inventory" },
+  { icon: <BsBank2 className="w-[18px] h-[18px]" />, name: "Banking", path: "/banking" },
+  { icon: <HiOutlineRefresh className="w-[18px] h-[18px]" />, name: "Recurring", path: "/recurring" },
+  { icon: <HiOutlineClipboardList className="w-[18px] h-[18px]" />, name: "Bills", path: "/bills" },
+  { icon: <HiOutlineCurrencyDollar className="w-[18px] h-[18px]" />, name: "Expenses", path: "/expenses" },
+  { icon: <HiOutlineBookOpen className="w-[18px] h-[18px]" />, name: "Journal", path: "/journal-entries" },
+  { icon: <HiOutlineReceiptRefund className="w-[18px] h-[18px]" />, name: "Credits", path: "/credit-notes" },
+  { icon: <HiOutlineDocumentRemove className="w-[18px] h-[18px]" />, name: "Debits", path: "/debit-notes" },
+  { icon: <HiOutlineUserGroup className="w-[18px] h-[18px]" />, name: "Users", path: "/users" },
+  { icon: <HiOutlineShieldCheck className="w-[18px] h-[18px]" />, name: "Roles", path: "/roles" },
+  { icon: <HiOutlineClipboardCheck className="w-[18px] h-[18px]" />, name: "Audit", path: "/audit-trail" },
+  { icon: <HiOutlineDotsHorizontal className="w-[18px] h-[18px]" />, name: "More", path: "/more" },
+  { icon: <HiOutlineAdjustments className="w-[18px] h-[18px]" />, name: "Customise", path: "/customise" },
 ];
 
 const AppSidebar: React.FC = () => {
   const pathname = usePathname();
-
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
   const renderMenuItems = (items: NavItem[]) => (
-    <ul className="flex flex-col items-center gap-4">
-      {items.map((nav) => (
-        <li key={nav.name}>
-          <Link
-            href={nav.path}
-            className="flex flex-col items-center gap-1 group"
-          >
-            <span
-              className={`p-2 rounded-xl transition-all duration-200 ${
-                isActive(nav.path)
-                  ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
-                  : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
-              }`}
+    <ul className="flex flex-col items-center gap-px">
+      {items.map((nav) => {
+        const active = isActive(nav.path);
+        return (
+          <li key={nav.name} className="w-full px-1.5">
+            <Link
+              href={nav.path}
+              title={nav.name}
+              className={`
+                relative flex flex-col items-center gap-[3px] py-[7px] w-full rounded
+                transition-all duration-150 group
+                ${active
+                  ? "bg-brand-100 text-brand-700"
+                  : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                }
+              `}
             >
-              {nav.icon}
-            </span>
-            <span
-              className={`text-[11px] font-medium ${
-                isActive(nav.path)
-                  ? "text-gray-900 dark:text-white"
-                  : "text-gray-500 dark:text-gray-400"
-              }`}
-            >
-              {nav.name}
-            </span>
-          </Link>
-        </li>
-      ))}
+
+              {/* Icon */}
+              <span className={`
+                flex items-center justify-center transition-colors duration-150
+                ${active ? "text-brand-600" : "text-gray-400 group-hover:text-brand-500"}
+              `}>
+                {nav.icon}
+              </span>
+
+              {/* Label */}
+              <span className={`
+                text-[9px] font-semibold leading-none tracking-wider truncate max-w-full px-0.5 uppercase
+                ${active ? "text-brand-600" : "text-gray-400 group-hover:text-gray-500"}
+              `}>
+                {nav.name}
+              </span>
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 
   return (
-    <aside className="fixed top-0 left-0 w-[90px] h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-50 flex flex-col">
-      {/* Logo */}
-      <div className="flex justify-center py-4">
-        <Link href="/">
+    <aside
+      className="fixed top-0 left-0 w-[72px] h-screen z-50 flex flex-col bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-800"
+    >
+      {/* Logo area */}
+      <div className="flex justify-center items-center shrink-0 border-b border-gray-200 dark:border-gray-800" style={{ height: "48px" }}>
+        <Link
+          href="/"
+          className="flex items-center justify-center w-9 h-9 rounded transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
           <Image
             src="/images/logo/logo-icon.svg"
             alt="Logo"
-            width={40}
-            height={40}
+            width={28}
+            height={28}
           />
         </Link>
       </div>
 
-      <div className="flex flex-col overflow-y-auto no-scrollbar flex-1">
+      {/* Nav scroll area */}
+      <div className="flex flex-col overflow-y-auto no-scrollbar flex-1 py-2">
         <nav className="flex-1">
-          <div className="flex flex-col gap-2">
-            {renderMenuItems(navItems)}
+          {renderMenuItems(navItems)}
 
-            <div className="border-t border-gray-200 dark:border-gray-800 mx-4 my-4" />
-
-            <h2 className="text-[10px] uppercase text-center text-gray-400 font-semibold mb-2">
+          {/* Divider */}
+          <div className="mx-4 my-2 flex items-center gap-1.5">
+            <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
+            <span className="text-[8px] font-bold uppercase tracking-[0.12em] text-gray-300 dark:text-gray-600">
               Pinned
-            </h2>
-            {renderMenuItems(pinnedItems)}
+            </span>
+            <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
           </div>
+
+          {renderMenuItems(pinnedItems)}
         </nav>
+      </div>
+
+      {/* Company switcher */}
+      <div className="shrink-0 border-t border-gray-200 dark:border-gray-800">
+        <CompanySwitcher variant="sidebar" />
+      </div>
+
+      {/* User — bottom */}
+      <div className="shrink-0 border-t border-gray-200 dark:border-gray-800">
+        <UserDropdown variant="sidebar" />
       </div>
     </aside>
   );

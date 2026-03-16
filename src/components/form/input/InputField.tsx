@@ -15,7 +15,7 @@ interface InputProps {
   disabled?: boolean;
   success?: boolean;
   error?: boolean;
-  hint?: string; // Optional hint text
+  hint?: string;
   autoComplete?: string;
 }
 
@@ -37,18 +37,16 @@ const Input: FC<InputProps> = ({
   hint,
   autoComplete,
 }) => {
-  // Determine input styles based on state (disabled, success, error)
-  let inputClasses = `h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 ${className}`;
+  let inputClasses = `h-9 w-full rounded border appearance-none px-3 py-2 text-[13px] placeholder:text-gray-400 focus:outline-none focus:ring-2 dark:text-gray-100 dark:placeholder:text-gray-500 transition-colors duration-150 ${className}`;
 
-  // Add styles for the different states
   if (disabled) {
-    inputClasses += ` text-gray-500 border-gray-300 cursor-not-allowed dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700`;
+    inputClasses += ` bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-700/50 dark:text-gray-500 dark:border-gray-700`;
   } else if (error) {
-    inputClasses += ` text-error-800 border-error-500 focus:ring-3 focus:ring-error-500/10  dark:text-error-400 dark:border-error-500`;
+    inputClasses += ` bg-white text-gray-800 border-error-400 focus:border-error-500 focus:ring-error-500/20 dark:bg-gray-800 dark:border-error-600 dark:text-gray-100`;
   } else if (success) {
-    inputClasses += ` text-success-500 border-success-400 focus:ring-success-500/10 focus:border-success-300  dark:text-success-400 dark:border-success-500`;
+    inputClasses += ` bg-white text-gray-800 border-success-400 focus:border-success-500 focus:ring-success-500/20 dark:bg-gray-800 dark:border-success-600 dark:text-gray-100`;
   } else {
-    inputClasses += ` bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800`;
+    inputClasses += ` bg-white text-gray-800 border-gray-300 hover:border-gray-400 focus:border-brand-500 focus:ring-brand-500/20 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:hover:border-gray-500 dark:focus:border-brand-400`;
   }
 
   return (
@@ -68,16 +66,14 @@ const Input: FC<InputProps> = ({
         disabled={disabled}
         className={inputClasses}
       />
-
-      {/* Optional Hint Text */}
       {hint && (
         <p
-          className={`mt-1.5 text-xs ${
+          className={`mt-1 text-[11px] ${
             error
               ? "text-error-500"
               : success
-              ? "text-success-500"
-              : "text-gray-500"
+              ? "text-success-600"
+              : "text-gray-500 dark:text-gray-400"
           }`}
         >
           {hint}

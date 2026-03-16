@@ -87,15 +87,15 @@ interface Props {
 }
 
 const RecentActivityFeed: React.FC<Props> = ({ data, loading }) => (
-  <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+  <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
     <div className="mb-4 flex items-center gap-2">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700">
+      <div className="flex h-8 w-8 items-center justify-center rounded bg-gray-100 dark:bg-gray-700">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2">
           <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
           <polyline points="13 2 13 9 20 9" />
         </svg>
       </div>
-      <h3 className="text-base font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
+      <h3 className="text-[14px] font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
     </div>
 
     {loading || !data ? (
@@ -118,7 +118,7 @@ const RecentActivityFeed: React.FC<Props> = ({ data, loading }) => (
           const meta = TYPE_META[a.type] ?? TYPE_META.JOURNAL_ENTRY;
           return (
             <div key={a.id} className="flex items-start gap-3">
-              <div className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg ${meta.bg} ${meta.color}`}>
+              <div className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded ${meta.bg} ${meta.color}`}>
                 {meta.icon}
               </div>
               <div className="min-w-0 flex-1">

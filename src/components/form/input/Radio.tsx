@@ -1,14 +1,14 @@
 import React from "react";
 
 interface RadioProps {
-  id: string; // Unique ID for the radio button
-  name: string; // Radio group name
-  value: string; // Value of the radio button
-  checked: boolean; // Whether the radio button is checked
-  label: string; // Label for the radio button
-  onChange: (value: string) => void; // Handler for value change
-  className?: string; // Optional additional classes
-  disabled?: boolean; // Optional disabled state for the radio button
+  id: string;
+  name: string;
+  value: string;
+  checked: boolean;
+  label: string;
+  onChange: (value: string) => void;
+  className?: string;
+  disabled?: boolean;
 }
 
 const Radio: React.FC<RadioProps> = ({
@@ -24,10 +24,10 @@ const Radio: React.FC<RadioProps> = ({
   return (
     <label
       htmlFor={id}
-      className={`relative flex cursor-pointer  select-none items-center gap-3 text-sm font-medium ${
+      className={`relative flex cursor-pointer select-none items-center gap-2.5 text-[13px] font-medium transition-colors duration-150 ${
         disabled
           ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-          : "text-gray-700 dark:text-gray-400"
+          : "text-gray-700 dark:text-gray-300"
       } ${className}`}
     >
       <input
@@ -36,26 +36,22 @@ const Radio: React.FC<RadioProps> = ({
         type="radio"
         value={value}
         checked={checked}
-        onChange={() => !disabled && onChange(value)} // Prevent onChange when disabled
+        onChange={() => !disabled && onChange(value)}
         className="sr-only"
-        disabled={disabled} // Disable input
+        disabled={disabled}
       />
       <span
-        className={`flex h-5 w-5 items-center justify-center rounded-full border-[1.25px] ${
+        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors duration-150 ${
           checked
             ? "border-brand-500 bg-brand-500"
-            : "bg-transparent border-gray-300 dark:border-gray-700"
+            : "bg-white border-gray-300 hover:border-brand-400 dark:bg-gray-800 dark:border-gray-600"
         } ${
           disabled
             ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-700"
             : ""
         }`}
       >
-        <span
-          className={`h-2 w-2 rounded-full bg-white ${
-            checked ? "block" : "hidden"
-          }`}
-        ></span>
+        <span className={`h-1.5 w-1.5 rounded-full bg-white ${checked ? "block" : "hidden"}`} />
       </span>
       {label}
     </label>

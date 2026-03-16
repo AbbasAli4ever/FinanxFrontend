@@ -7,6 +7,7 @@ import {
   UpdateUserRequest,
   User,
   UserDetails,
+  ValidateInvitationData,
 } from "@/types/users";
 import { API_BASE_URL, JSON_HEADERS, request } from "@/services/apiClient";
 
@@ -136,6 +137,14 @@ export const usersService = {
         body: JSON.stringify(payload),
       }
     );
+  },
+
+  async validateInvitation(token: string): Promise<ValidateInvitationData> {
+    const response = await request<ApiResponse<ValidateInvitationData>>(
+      `${API_BASE_URL}/users/validate-invitation?token=${encodeURIComponent(token)}`,
+      { method: "GET" }
+    );
+    return response.data;
   },
 
   async acceptInvitation(payload: AcceptInvitationRequest): Promise<UserDetails> {

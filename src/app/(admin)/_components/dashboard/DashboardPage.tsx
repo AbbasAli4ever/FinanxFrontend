@@ -39,7 +39,6 @@ const DashboardPage: React.FC = () => {
   const { token } = useAuth();
   const [period, setPeriod] = useState<PeriodParams>(DEFAULT_PERIOD);
 
-  // Period-sensitive data
   const [financial, setFinancial] = useState<FinancialOverview | null>(null);
   const [trend, setTrend] = useState<RevenueTrend | null>(null);
   const [invoiceAnalytics, setInvoiceAnalytics] = useState<InvoiceAnalytics | null>(null);
@@ -50,7 +49,6 @@ const DashboardPage: React.FC = () => {
   const [comparison, setComparison] = useState<PeriodComparison | null>(null);
   const [periodLoading, setPeriodLoading] = useState(true);
 
-  // Period-independent data
   const [cashFlow, setCashFlow] = useState<CashFlowOverview | null>(null);
   const [inventory, setInventory] = useState<InventoryStats | null>(null);
   const [projects, setProjects] = useState<ProjectOverview | null>(null);
@@ -105,7 +103,6 @@ const DashboardPage: React.FC = () => {
     setStaticLoading(false);
   }, []);
 
-  // Initial load
   useEffect(() => {
     if (!token) return;
     fetchPeriodData(period, token);
@@ -113,7 +110,6 @@ const DashboardPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  // Re-fetch period data on period change (not on mount — handled above)
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     if (!mounted) { setMounted(true); return; }
@@ -129,7 +125,6 @@ const DashboardPage: React.FC = () => {
   };
 
   const handlePeriodChange = (p: PeriodParams) => {
-    // For custom, wait until both dates are set
     if (p.period === "custom" && (!p.startDate || !p.endDate)) {
       setPeriod(p);
       return;
@@ -138,14 +133,14 @@ const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950">
-      <div className="mx-auto max-w-[1600px] space-y-5 p-4 sm:p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="mx-auto space-y-4 p-4 sm:p-6">
 
-        {/* Header */}
+        {/* Page header */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-            <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+            <h1 className="text-[18px] font-semibold text-gray-900 dark:text-white">Dashboard</h1>
+            <p className="mt-0.5 text-[13px] text-gray-500 dark:text-gray-400">
               Financial overview and analytics
             </p>
           </div>
@@ -154,11 +149,11 @@ const DashboardPage: React.FC = () => {
             <button
               onClick={handleRefresh}
               disabled={periodLoading || staticLoading}
-              className="flex h-9 items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              className="inline-flex h-9 items-center gap-1.5 rounded border border-gray-300 bg-white px-3 text-[13px] font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-400 disabled:opacity-50 transition-all duration-150 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               title="Refresh all data"
             >
               <svg
-                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                 className={(periodLoading || staticLoading) ? "animate-spin" : ""}
               >
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -166,7 +161,7 @@ const DashboardPage: React.FC = () => {
               </svg>
               Refresh
             </button>
-            <span className="text-xs text-gray-400 dark:text-gray-500">
+            <span className="text-[12px] text-gray-400 dark:text-gray-500">
               Updated {lastRefreshed.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
             </span>
           </div>
@@ -179,19 +174,19 @@ const DashboardPage: React.FC = () => {
         <RevenueTrendChart data={trend} loading={periodLoading} />
 
         {/* Invoice & Bill Analytics */}
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <InvoiceAnalyticsCard data={invoiceAnalytics} loading={periodLoading} />
           <BillAnalyticsCard data={billAnalytics} loading={periodLoading} />
         </div>
 
         {/* Top Customers & Vendors */}
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <TopCustomersChart data={topCustomers} loading={periodLoading} />
           <TopVendorsChart data={topVendors} loading={periodLoading} />
         </div>
 
         {/* Cash Flow + Recent Activity */}
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
           <div className="xl:col-span-2">
             <CashFlowCard data={cashFlow} loading={staticLoading} />
           </div>
@@ -199,7 +194,7 @@ const DashboardPage: React.FC = () => {
         </div>
 
         {/* Expense Breakdown + Inventory */}
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <ExpenseBreakdownCard data={expenses} loading={periodLoading} />
           <InventoryStatsCard data={inventory} loading={staticLoading} />
         </div>

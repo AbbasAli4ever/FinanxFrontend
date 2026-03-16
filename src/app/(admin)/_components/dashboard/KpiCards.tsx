@@ -18,14 +18,14 @@ interface ChangeBadgeProps {
 const ChangeBadge: React.FC<ChangeBadgeProps> = ({ direction, percent, invertColors }) => {
   if (direction === "new") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-semibold text-brand-700 dark:bg-brand-900/30 dark:text-brand-300">
+      <span className="inline-flex items-center gap-1 rounded bg-brand-50 px-2 py-0.5 text-[11px] font-semibold text-brand-700 dark:bg-brand-900/30 dark:text-brand-300">
         New
       </span>
     );
   }
   if (direction === "flat") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+      <span className="inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-500 dark:bg-gray-700 dark:text-gray-400">
         — Flat
       </span>
     );
@@ -39,7 +39,7 @@ const ChangeBadge: React.FC<ChangeBadgeProps> = ({ direction, percent, invertCol
     : "bg-error-50 text-error-700 dark:bg-error-900/30 dark:text-error-400";
 
   return (
-    <span className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ${colorCls}`}>
+    <span className={`inline-flex items-center gap-0.5 rounded px-2 py-0.5 text-[11px] font-semibold ${colorCls}`}>
       {isUp ? (
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
           <path d="M18 15l-6-6-6 6" />
@@ -67,20 +67,20 @@ interface KpiCardProps {
 }
 
 const KpiCard: React.FC<KpiCardProps> = ({ title, value, subtitle, pv, invertColors, icon, bgClass, iconColor, loading }) => (
-  <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+  <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
     <div className="flex items-start justify-between">
       <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">{title}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{title}</p>
         {loading ? (
           <div className="mt-2 h-8 w-28 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700" />
         ) : (
-          <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+          <p className="mt-1 text-[22px] font-bold text-gray-900 dark:text-white">{value}</p>
         )}
         {subtitle && !loading && (
           <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{subtitle}</p>
         )}
       </div>
-      <div className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl ${bgClass}`}>
+      <div className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded ${bgClass}`}>
         <span className={iconColor}>{icon}</span>
       </div>
     </div>

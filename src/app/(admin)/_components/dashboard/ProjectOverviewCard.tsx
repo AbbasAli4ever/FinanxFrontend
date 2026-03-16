@@ -42,10 +42,10 @@ interface Props {
 }
 
 const ProjectOverviewCard: React.FC<Props> = ({ data, loading }) => (
-  <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+  <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
     <div className="mb-4 flex items-center gap-2">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-900/20">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2">
+      <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 dark:bg-brand-900/20">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6A89A7" strokeWidth="2">
           <rect x="2" y="3" width="6" height="6" rx="1" />
           <rect x="16" y="3" width="6" height="6" rx="1" />
           <rect x="9" y="14" width="6" height="7" rx="1" />
@@ -53,18 +53,18 @@ const ProjectOverviewCard: React.FC<Props> = ({ data, loading }) => (
           <path d="M12 13v1" />
         </svg>
       </div>
-      <h3 className="text-base font-semibold text-gray-900 dark:text-white">Project Overview</h3>
+      <h3 className="text-[14px] font-semibold text-gray-900 dark:text-white">Project Overview</h3>
     </div>
 
     {loading || !data ? (
       <div className="space-y-3">
         <div className="grid grid-cols-4 gap-2">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+            <div key={i} className="h-16 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
           ))}
         </div>
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
+          <div key={i} className="h-16 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
         ))}
       </div>
     ) : (
@@ -74,7 +74,7 @@ const ProjectOverviewCard: React.FC<Props> = ({ data, loading }) => (
           {(["ACTIVE", "ON_HOLD", "COMPLETED", "CANCELLED"] as const).map((status) => {
             const sc = STATUS_COLOR[status];
             return (
-              <div key={status} className={`rounded-xl p-3 text-center ${sc.bg}`}>
+              <div key={status} className={`rounded p-3 text-center ${sc.bg}`}>
                 <p className={`text-2xl font-bold ${sc.text}`}>{data.summary[status]}</p>
                 <p className={`text-[10px] font-medium ${sc.text}`}>{status.replace("_", " ")}</p>
               </div>
@@ -83,7 +83,7 @@ const ProjectOverviewCard: React.FC<Props> = ({ data, loading }) => (
         </div>
 
         {/* Totals */}
-        <div className="mb-4 flex items-center gap-4 rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+        <div className="mb-4 flex items-center gap-4 rounded bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
           <div>
             <p className="text-[10px] uppercase tracking-wide text-gray-400">Billable Hours</p>
             <p className="text-sm font-bold text-gray-900 dark:text-white">{data.summary.totalBillableHours.toFixed(1)}h</p>
@@ -106,7 +106,7 @@ const ProjectOverviewCard: React.FC<Props> = ({ data, loading }) => (
             const sc = STATUS_COLOR[p.status] ?? STATUS_COLOR.CANCELLED;
             const burn = clamp(p.hoursBurnPercent);
             return (
-              <div key={p.projectId} className="rounded-xl border border-gray-100 p-3 dark:border-gray-700/60">
+              <div key={p.projectId} className="rounded border border-gray-100 p-3 dark:border-gray-700/60">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -118,7 +118,7 @@ const ProjectOverviewCard: React.FC<Props> = ({ data, loading }) => (
                     )}
                   </div>
                   <div className="flex items-center gap-2 text-right">
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${sc.text} ${sc.bg}`}>
+                    <span className={`rounded px-2 py-0.5 text-[10px] font-semibold ${sc.text} ${sc.bg}`}>
                       {p.status.replace("_", " ")}
                     </span>
                   </div>

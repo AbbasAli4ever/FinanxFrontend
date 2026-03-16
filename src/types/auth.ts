@@ -8,6 +8,40 @@ export interface Role {
   name: string;
 }
 
+// Multi-company types
+export interface CompanySelectionItem {
+  companyId: string;
+  companyName: string;
+  userId: string;
+  role: Role | null;
+  isPrimaryAdmin: boolean;
+  lastLoginAt: string | null;
+}
+
+export interface MyCompanyItem extends CompanySelectionItem {
+  isCurrentCompany: boolean;
+}
+
+export interface CompanySelectionData {
+  requiresCompanySelection: true;
+  companies: CompanySelectionItem[];
+  tempToken: string;
+}
+
+export interface CompanySelectionResponse {
+  success: boolean;
+  message: string;
+  data: CompanySelectionData;
+}
+
+export type LoginResponse = AuthResponse | CompanySelectionResponse;
+
+export interface MyCompaniesResponse {
+  success: boolean;
+  message: string;
+  data: MyCompanyItem[];
+}
+
 export interface RegisterRequest {
   company: {
     name: string;
