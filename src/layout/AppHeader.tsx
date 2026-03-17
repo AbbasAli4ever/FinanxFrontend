@@ -52,8 +52,7 @@ const AppHeader: React.FC = () => {
 
           {/* Mobile logo */}
           <Link href="/" className="lg:hidden">
-            <Image width={120} height={28} className="dark:hidden" src="./images/logo/logo.svg" alt="Logo" />
-            <Image width={120} height={28} className="hidden dark:block" src="./images/logo/logo-dark.svg" alt="Logo" />
+            <Image width={32} height={32} src="/images/logo/f-logo.png" alt="Logo" />
           </Link>
 
           {/* Desktop search */}

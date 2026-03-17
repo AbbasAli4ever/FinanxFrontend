@@ -36,11 +36,14 @@ import {
   HiOutlineSearch,
   HiOutlineReceiptTax,
   HiOutlineBell,
+  HiChevronLeft,
+  HiChevronRight,
 } from "react-icons/hi";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { BsBank2 } from "react-icons/bs";
 import UserDropdown from "@/components/header/UserDropdown";
 import CompanySwitcher from "@/components/company/CompanySwitcher";
+import { useSidebar } from "@/context/SidebarContext";
 
 type NavItem = {
   name: string;
@@ -90,10 +93,11 @@ const pinnedItems: NavItem[] = [
 
 const AppSidebar: React.FC = () => {
   const pathname = usePathname();
+  const { isExpanded, toggleSidebar } = useSidebar();
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
   const renderMenuItems = (items: NavItem[]) => (
-    <ul className="flex flex-col items-center gap-px">
+    <ul className="flex flex-col gap-px">
       {items.map((nav) => {
         const active = isActive(nav.path);
         return (
@@ -102,30 +106,39 @@ const AppSidebar: React.FC = () => {
               href={nav.path}
               title={nav.name}
               className={`
-                relative flex flex-col items-center gap-[3px] py-[7px] w-full rounded
-                transition-all duration-150 group
+                relative flex items-center gap-2.5 w-full rounded
+                transition-all duration-150 group overflow-hidden
+                ${isExpanded ? "px-3 py-2" : "flex-col px-1 py-[7px] justify-center"}
                 ${active
                   ? "bg-brand-100 text-brand-700"
                   : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                 }
               `}
             >
-
               {/* Icon */}
               <span className={`
-                flex items-center justify-center transition-colors duration-150
+                flex shrink-0 items-center justify-center transition-colors duration-150
                 ${active ? "text-brand-600" : "text-gray-400 group-hover:text-brand-500"}
               `}>
                 {nav.icon}
               </span>
 
               {/* Label */}
-              <span className={`
-                text-[9px] font-semibold leading-none tracking-wider truncate max-w-full px-0.5 uppercase
-                ${active ? "text-brand-600" : "text-gray-400 group-hover:text-gray-500"}
-              `}>
-                {nav.name}
-              </span>
+              {isExpanded ? (
+                <span className={`
+                  text-[13px] font-medium leading-none truncate
+                  ${active ? "text-brand-700" : "text-gray-500 group-hover:text-gray-700"}
+                `}>
+                  {nav.name}
+                </span>
+              ) : (
+                <span className={`
+                  text-[9px] font-semibold leading-none tracking-wider truncate max-w-full px-0.5 uppercase
+                  ${active ? "text-brand-600" : "text-gray-400 group-hover:text-gray-500"}
+                `}>
+                  {nav.name}
+                </span>
+              )}
             </Link>
           </li>
         );
@@ -135,21 +148,55 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className="fixed top-0 left-0 w-[72px] h-screen z-50 flex flex-col bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-800"
+      className={`
+        fixed top-0 left-0 h-screen z-50 flex flex-col
+        bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-800
+        transition-all duration-200 ease-in-out
+        ${isExpanded ? "w-[220px]" : "w-[72px]"}
+      `}
     >
-      {/* Logo area */}
-      <div className="flex justify-center items-center shrink-0 border-b border-gray-200 dark:border-gray-800" style={{ height: "48px" }}>
+      {/* Logo + toggle */}
+      <div
+        className="flex items-center shrink-0 border-b border-gray-200 dark:border-gray-800 px-1.5"
+        style={{ height: "48px" }}
+      >
+        {/* Logo */}
         <Link
           href="/"
-          className="flex items-center justify-center w-9 h-9 rounded transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="flex items-center justify-center w-9 h-9 rounded transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-800 shrink-0"
         >
           <Image
-            src="/images/logo/logo-icon.svg"
+            src="/images/logo/f-logo.png"
             alt="Logo"
             width={28}
             height={28}
           />
         </Link>
+
+        {/* App name — only when expanded */}
+        {isExpanded && (
+          <span className="ml-2 text-[13px] font-semibold text-gray-700 dark:text-gray-200 truncate flex-1">
+            FinanX
+          </span>
+        )}
+
+        {/* Toggle button — always at top-right */}
+        <button
+          onClick={toggleSidebar}
+          className={`
+            flex items-center justify-center w-7 h-7 rounded
+            text-gray-400 hover:bg-gray-100 hover:text-gray-600
+            dark:hover:bg-gray-800 dark:hover:text-gray-300
+            transition-colors duration-150 shrink-0
+            ${isExpanded ? "ml-auto" : "mx-auto mt-0"}
+          `}
+          aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
+        >
+          {isExpanded
+            ? <HiChevronLeft className="w-4 h-4" />
+            : <HiChevronRight className="w-4 h-4" />
+          }
+        </button>
       </div>
 
       {/* Nav scroll area */}
@@ -158,11 +205,13 @@ const AppSidebar: React.FC = () => {
           {renderMenuItems(navItems)}
 
           {/* Divider */}
-          <div className="mx-4 my-2 flex items-center gap-1.5">
+          <div className={`mx-3 my-2 flex items-center gap-1.5 ${!isExpanded && "justify-center"}`}>
             <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-            <span className="text-[8px] font-bold uppercase tracking-[0.12em] text-gray-300 dark:text-gray-600">
-              Pinned
-            </span>
+            {isExpanded && (
+              <span className="text-[8px] font-bold uppercase tracking-[0.12em] text-gray-300 dark:text-gray-600 shrink-0">
+                Pinned
+              </span>
+            )}
             <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
           </div>
 

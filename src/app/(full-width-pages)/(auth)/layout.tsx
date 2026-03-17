@@ -43,7 +43,7 @@ export default function AuthLayout({
               <Image
                 width={40}
                 height={40}
-                src="/images/logo/logo-icon.svg"
+                src="/images/logo/f-logo.png"
                 alt="FinanX"
                 className="mx-auto"
               />
