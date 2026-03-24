@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import Button from "@/components/ui/button/Button";
 import Label from "@/components/form/Label";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import Input from "@/components/form/input/InputField";
 import TextArea from "@/components/form/input/TextArea";
 import Checkbox from "@/components/form/input/Checkbox";
@@ -503,13 +504,13 @@ const CreateVendorModal: React.FC<CreateVendorModalProps> = ({
             </div>
             <div>
               <Label htmlFor="vendorOpeningDate">As of Date</Label>
-              <Input
+              <AppDatePicker
                 id="vendorOpeningDate"
-                type="date"
                 value={form.openingBalanceDate}
-                onChange={(e) =>
-                  setForm({ ...form, openingBalanceDate: e.target.value })
+                onChange={(val) =>
+                  setForm({ ...form, openingBalanceDate: val })
                 }
+                maxToday
               />
             </div>
           </div>

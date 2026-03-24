@@ -9,6 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 import purchaseOrdersService from "@/services/purchaseOrdersService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { PurchaseOrder, POStatus } from "@/types/purchaseOrders";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface Props {
   isOpen: boolean;
@@ -53,6 +55,7 @@ const PurchaseOrderDetailModal: React.FC<Props> = ({
   isOpen, poId, onClose, onEdit, onSend, onReceive, onConvert, onClose2, onVoid, onDelete, onDuplicated,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [po, setPo] = useState<PurchaseOrder | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -127,6 +130,13 @@ const PurchaseOrderDetailModal: React.FC<Props> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-4 dark:border-gray-800">
+            <ExportButton
+              entityType="purchase-order"
+              entityId={po.id}
+              fileName={`PO_${po.poNumber}`}
+              token={token ?? ""}
+              canExport={hasPermission("data:export")}
+            />
             {po.statusInfo.allowEdit && (
               <Button size="sm" variant="outline" onClick={() => { onClose(); onEdit(po.id); }}>Edit</Button>
             )}

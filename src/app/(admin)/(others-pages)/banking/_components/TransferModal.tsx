@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import bankingService from "@/services/bankingService";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { BankAccount, TransferResult } from "@/types/banking";
 
@@ -213,12 +214,10 @@ const TransferModal: React.FC<Props> = ({
               {/* Date */}
               <div className="col-span-1">
                 <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Date *</label>
-                <input
-                  type="date"
+                <AppDatePicker
                   value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                  className="w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                  onChange={(val) => setDate(val)}
+                  maxToday
                 />
               </div>
 

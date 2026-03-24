@@ -17,6 +17,7 @@ import type { ProductListItem } from "@/types/products";
 import type { RecurringFrequency } from "@/types/recurring";
 import type { Currency } from "@/types/currency";
 import CurrencySelector from "@/components/currency/CurrencySelector";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 const RECURRING_FREQUENCIES: { value: RecurringFrequency; label: string }[] = [
   { value: "DAILY", label: "Daily" },
@@ -393,11 +394,11 @@ const CreateInvoiceModal: React.FC<CreateInvoiceModalProps> = ({
               <Label htmlFor="ci-date">
                 Invoice Date <span className="text-error-500">*</span>
               </Label>
-              <Input
+              <AppDatePicker
                 id="ci-date"
-                type="date"
                 value={invoiceDate}
-                onChange={(e) => setInvoiceDate(e.target.value)}
+                onChange={(val) => setInvoiceDate(val)}
+                maxToday
               />
             </div>
 
@@ -419,11 +420,11 @@ const CreateInvoiceModal: React.FC<CreateInvoiceModalProps> = ({
 
             <div>
               <Label htmlFor="ci-due">Due Date</Label>
-              <Input
+              <AppDatePicker
                 id="ci-due"
-                type="date"
                 value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
+                onChange={(val) => setDueDate(val)}
+                min={invoiceDate}
                 disabled={paymentTerms !== "CUSTOM"}
               />
             </div>
@@ -800,11 +801,10 @@ const CreateInvoiceModal: React.FC<CreateInvoiceModalProps> = ({
                 </div>
                 <div>
                   <Label>End Date <span className="text-gray-400 text-xs font-normal">(optional — leave blank for forever)</span></Label>
-                  <Input
-                    type="date"
+                  <AppDatePicker
                     value={recurringEndDate}
-                    onChange={(e) => setRecurringEndDate(e.target.value)}
-                    placeholder="No end date"
+                    onChange={(val) => setRecurringEndDate(val)}
+                    min={invoiceDate}
                   />
                 </div>
                 <div className="col-span-full rounded-lg border border-brand-100 bg-brand-50/60 px-3 py-2.5 dark:border-brand-800 dark:bg-brand-900/10">

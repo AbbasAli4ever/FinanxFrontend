@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import projectsService from "@/services/projectsService";
 import customersService from "@/services/customersService";
 import type { CreateProjectRequest, BillingMethod } from "@/types/projects";
@@ -107,11 +108,11 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose, onCreated }) => 
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelCls}>Start Date</label>
-              <input type="date" value={form.startDate ?? ""} onChange={(e) => set("startDate", e.target.value || undefined)} className={inputCls} />
+              <AppDatePicker value={form.startDate ?? ""} onChange={(val) => set("startDate", val || undefined)} maxToday />
             </div>
             <div>
               <label className={labelCls}>End Date</label>
-              <input type="date" value={form.endDate ?? ""} onChange={(e) => set("endDate", e.target.value || undefined)} className={inputCls} />
+              <AppDatePicker value={form.endDate ?? ""} onChange={(val) => set("endDate", val || undefined)} min={form.startDate ?? ""} />
             </div>
           </div>
 

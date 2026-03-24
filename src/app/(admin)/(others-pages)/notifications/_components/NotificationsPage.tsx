@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import { useAuth } from "@/context/AuthContext";
 import { usePermissions } from "@/context/PermissionsContext";
 import Alert from "@/components/ui/alert/Alert";
@@ -309,20 +310,18 @@ export default function NotificationsPage() {
 
           {/* Date range */}
           <div className="flex items-center gap-2 ml-auto">
-            <input
-              type="date"
+            <AppDatePicker
               value={dateFrom}
-              onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
-              className={selectClasses}
-              placeholder="From"
+              onChange={(val) => { setDateFrom(val); setPage(1); }}
+              maxToday
+              max={dateTo}
             />
             <span className="text-gray-400 text-sm">→</span>
-            <input
-              type="date"
+            <AppDatePicker
               value={dateTo}
-              onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
-              className={selectClasses}
-              placeholder="To"
+              onChange={(val) => { setDateTo(val); setPage(1); }}
+              min={dateFrom}
+              maxToday
             />
           </div>
         </div>

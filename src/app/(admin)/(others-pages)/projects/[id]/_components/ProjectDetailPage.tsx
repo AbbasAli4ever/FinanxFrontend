@@ -12,6 +12,7 @@ import type {
   TimeEntryStatus,
 } from "@/types/projects";
 import ProjectStatusBadge, { BILLING_METHOD_LABELS } from "../../_components/ProjectStatusBadge";
+import AttachmentsPanel from "@/components/documents/AttachmentsPanel";
 
 // ── Helpers ──────────────────────────────────────────────────────
 function fmt(n: number) {
@@ -257,7 +258,7 @@ const ProjectDetailPage: React.FC<{ id: string }> = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [loadingProfit, setLoadingProfit] = useState(false);
   const [error, setError] = useState("");
-  const [tab, setTab] = useState<"overview" | "team" | "time-entries">("overview");
+  const [tab, setTab] = useState<"overview" | "team" | "time-entries" | "attachments">("overview");
   const [statusUpdating, setStatusUpdating] = useState(false);
 
   const load = useCallback(async () => {
@@ -314,6 +315,7 @@ const ProjectDetailPage: React.FC<{ id: string }> = ({ id }) => {
     { id: "overview", label: "Overview" },
     { id: "team", label: `Team (${project.teamMembers.length})` },
     { id: "time-entries", label: `Time Entries (${project.stats.totalTimeEntries})` },
+    { id: "attachments", label: "Attachments" },
   ] as const;
 
   const statusActions: { label: string; status: string; color: string }[] = project.status === "ACTIVE"
@@ -388,6 +390,11 @@ const ProjectDetailPage: React.FC<{ id: string }> = ({ id }) => {
       )}
       {tab === "team" && <TeamTab project={project} />}
       {tab === "time-entries" && <TimeEntriesTab projectId={id} />}
+      {tab === "attachments" && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+          <AttachmentsPanel entityType="PROJECT" entityId={id} />
+        </div>
+      )}
     </div>
   );
 };

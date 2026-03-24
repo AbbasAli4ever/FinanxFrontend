@@ -9,6 +9,9 @@ import { useAuth } from "@/context/AuthContext";
 import invoicesService from "@/services/invoicesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { Invoice, InvoiceStatus } from "@/types/invoices";
+import AttachmentsPanel from "@/components/documents/AttachmentsPanel";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface InvoiceDetailModalProps {
   isOpen: boolean;
@@ -65,6 +68,7 @@ const InvoiceDetailModal: React.FC<InvoiceDetailModalProps> = ({
   onDelete,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -344,8 +348,20 @@ const InvoiceDetailModal: React.FC<InvoiceDetailModalProps> = ({
             </div>
           </div>
 
+          {/* Attachments */}
+          <div className="mt-6 border-t border-gray-200 pt-5 dark:border-gray-700">
+            <AttachmentsPanel entityType="INVOICE" entityId={invoice.id} />
+          </div>
+
           {/* Action Buttons */}
           <div className="mt-6 flex flex-wrap items-center justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+            <ExportButton
+              entityType="invoice"
+              entityId={invoice.id}
+              fileName={`Invoice_${invoice.invoiceNumber}`}
+              token={token ?? ""}
+              canExport={hasPermission("data:export")}
+            />
             {si?.allowEdit && (
               <Button
                 variant="outline"

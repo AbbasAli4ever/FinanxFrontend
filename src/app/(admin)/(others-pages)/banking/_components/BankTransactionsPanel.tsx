@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import bankingService from "@/services/bankingService";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type {
   BankAccount,
@@ -283,19 +284,19 @@ const BankTransactionsPanel: React.FC<Props> = ({
           {TYPE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
 
-        <input
-          type="date"
+        <AppDatePicker
           value={startDate}
-          onChange={(e) => { setStartDate(e.target.value); setPage(1); }}
-          className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+          onChange={(val) => { setStartDate(val); setPage(1); }}
+          maxToday
+          max={endDate}
         />
 
         <div className="flex gap-1">
-          <input
-            type="date"
+          <AppDatePicker
             value={endDate}
-            onChange={(e) => { setEndDate(e.target.value); setPage(1); }}
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            onChange={(val) => { setEndDate(val); setPage(1); }}
+            min={startDate}
+            maxToday
           />
           {hasFilters && (
             <button

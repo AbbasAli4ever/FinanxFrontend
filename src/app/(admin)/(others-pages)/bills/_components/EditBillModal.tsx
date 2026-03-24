@@ -13,6 +13,7 @@ import productsService from "@/services/productsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { Bill, PaymentTerms, DiscountType } from "@/types/bills";
 import type { ProductListItem } from "@/types/products";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 interface LineItem {
   key: string;
@@ -246,7 +247,7 @@ const EditBillModal: React.FC<EditBillModalProps> = ({
               </div>
               <div><Label htmlFor="eb-number">Bill Number</Label><Input id="eb-number" value={billNumber} onChange={(e) => setBillNumber(e.target.value)} /></div>
               <div><Label htmlFor="eb-vinv">Vendor Invoice #</Label><Input id="eb-vinv" value={vendorInvoiceNumber} onChange={(e) => setVendorInvoiceNumber(e.target.value)} placeholder="Vendor's reference" /></div>
-              <div><Label htmlFor="eb-date">Bill Date <span className="text-error-500">*</span></Label><Input id="eb-date" type="date" value={billDate} onChange={(e) => setBillDate(e.target.value)} /></div>
+              <div><Label htmlFor="eb-date">Bill Date <span className="text-error-500">*</span></Label><AppDatePicker id="eb-date" value={billDate} onChange={(val) => setBillDate(val)} maxToday /></div>
               <div>
                 <Label htmlFor="eb-terms">Payment Terms</Label>
                 <select id="eb-terms" value={paymentTerms} onChange={(e) => setPaymentTerms(e.target.value as PaymentTerms)}
@@ -254,7 +255,7 @@ const EditBillModal: React.FC<EditBillModalProps> = ({
                   {PAYMENT_TERMS_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
               </div>
-              <div><Label htmlFor="eb-due">Due Date</Label><Input id="eb-due" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} disabled={paymentTerms !== "CUSTOM"} /></div>
+              <div><Label htmlFor="eb-due">Due Date</Label><AppDatePicker id="eb-due" value={dueDate} onChange={(val) => setDueDate(val)} min={billDate} disabled={paymentTerms !== "CUSTOM"} /></div>
               <div><Label htmlFor="eb-ref">Reference Number</Label><Input id="eb-ref" value={referenceNumber} onChange={(e) => setReferenceNumber(e.target.value)} placeholder="e.g. PO-2026-042" /></div>
             </div>
 

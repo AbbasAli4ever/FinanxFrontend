@@ -5,6 +5,7 @@ import { Modal } from "@/components/ui/modal";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import salesOrdersService from "@/services/salesOrdersService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { SalesOrder, SOLineItem } from "@/types/salesOrders";
@@ -192,12 +193,7 @@ const FulfillItemsModal: React.FC<Props> = ({ isOpen, so, onClose, onFulfilled }
           <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
             Fulfillment Date <span className="text-gray-400">(optional)</span>
           </label>
-          <input
-            type="date"
-            value={fulfilledDate}
-            onChange={(e) => setFulfilledDate(e.target.value)}
-            className="w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white sm:w-48"
-          />
+          <AppDatePicker value={fulfilledDate} onChange={(val) => setFulfilledDate(val)} maxToday />
         </div>
 
         {error && <Alert variant="error" title="Error" message={error} />}

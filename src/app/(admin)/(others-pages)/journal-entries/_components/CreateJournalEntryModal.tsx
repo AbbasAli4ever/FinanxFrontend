@@ -8,6 +8,7 @@ import Input from "@/components/form/input/InputField";
 import TextArea from "@/components/form/input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import journalEntriesService from "@/services/journalEntriesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { JournalEntryType, RecurringFrequency } from "@/types/journalEntries";
@@ -245,7 +246,7 @@ const CreateJournalEntryModal: React.FC<CreateJournalEntryModalProps> = ({
           </div>
           <div>
             <Label>Entry Date <span className="text-error-500">*</span></Label>
-            <Input type="date" value={entryDate} onChange={(e) => setEntryDate(e.target.value)} />
+            <AppDatePicker value={entryDate} onChange={(val) => setEntryDate(val)} maxToday />
           </div>
           <div>
             <Label>Entry Type</Label>
@@ -385,7 +386,7 @@ const CreateJournalEntryModal: React.FC<CreateJournalEntryModalProps> = ({
               </div>
               <div>
                 <Label>End Date</Label>
-                <Input type="date" value={recurringEndDate} onChange={(e) => setRecurringEndDate(e.target.value)} />
+                <AppDatePicker value={recurringEndDate} onChange={(val) => setRecurringEndDate(val)} min={entryDate} />
               </div>
             </div>
           </div>
@@ -408,7 +409,7 @@ const CreateJournalEntryModal: React.FC<CreateJournalEntryModalProps> = ({
             {isAutoReversing && (
               <div className="max-w-xs">
                 <Label>Reversal Date</Label>
-                <Input type="date" value={reversalDate} onChange={(e) => setReversalDate(e.target.value)} />
+                <AppDatePicker value={reversalDate} onChange={(val) => setReversalDate(val)} min={entryDate} />
                 <p className="mt-1 text-xs text-purple-600 dark:text-purple-400">
                   A reversal draft with flipped debits/credits will be auto-created when this entry is posted.
                 </p>

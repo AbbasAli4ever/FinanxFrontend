@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import timeEntriesService from "@/services/timeEntriesService";
 import projectsService from "@/services/projectsService";
 import type { TimeEntry, TimeEntryFilters, TimeEntryStatus } from "@/types/projects";
@@ -350,8 +351,8 @@ const TimeTrackingPage: React.FC = () => {
           <option value="">All Projects</option>
           {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
-        <input type="date" value={filters.startDate ?? ""} onChange={(e) => setFilters((p) => ({ ...p, startDate: e.target.value || undefined, page: 1 }))} className={inputCls} title="From date" />
-        <input type="date" value={filters.endDate ?? ""} onChange={(e) => setFilters((p) => ({ ...p, endDate: e.target.value || undefined, page: 1 }))} className={inputCls} title="To date" />
+        <AppDatePicker value={filters.startDate ?? ""} onChange={(val) => setFilters((p) => ({ ...p, startDate: val || undefined, page: 1 }))} maxToday max={filters.endDate ?? ""} />
+        <AppDatePicker value={filters.endDate ?? ""} onChange={(val) => setFilters((p) => ({ ...p, endDate: val || undefined, page: 1 }))} min={filters.startDate ?? ""} maxToday />
         <select value={filters.isBillable ?? ""} onChange={(e) => setFilters((p) => ({ ...p, isBillable: e.target.value || undefined, page: 1 }))} className={inputCls}>
           <option value="">All Types</option>
           <option value="true">Billable</option>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import currencyService from "@/services/currencyService";
 import type {
   Currency,
@@ -421,8 +422,8 @@ const ExchangeRatesTab: React.FC<ExchangeRatesTabProps> = ({ currencies }) => {
           <option value="">All Currencies</option>
           {nonBase.map((c) => <option key={c.code} value={c.code}>{c.code} — {c.name}</option>)}
         </select>
-        <input type="date" value={filterFrom} onChange={(e) => setFilterFrom(e.target.value)} className={inputCls} title="From date" />
-        <input type="date" value={filterTo} onChange={(e) => setFilterTo(e.target.value)} className={inputCls} title="To date" />
+        <AppDatePicker value={filterFrom} onChange={(val) => setFilterFrom(val)} maxToday max={filterTo} />
+        <AppDatePicker value={filterTo} onChange={(val) => setFilterTo(val)} min={filterFrom} maxToday />
         <div className="ml-auto flex gap-2">
           <button
             onClick={handleSyncRates}
@@ -468,7 +469,7 @@ const ExchangeRatesTab: React.FC<ExchangeRatesTabProps> = ({ currencies }) => {
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-300">Effective Date</label>
-              <input required type="date" value={singleForm.effectiveDate} onChange={(e) => setSingleForm((p) => ({ ...p, effectiveDate: e.target.value }))} className={inputCls} />
+              <AppDatePicker value={singleForm.effectiveDate} onChange={(val) => setSingleForm((p) => ({ ...p, effectiveDate: val }))} maxToday />
             </div>
             <div className="flex items-end gap-2">
               <button type="submit" className="rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-600">Save</button>
@@ -487,7 +488,7 @@ const ExchangeRatesTab: React.FC<ExchangeRatesTabProps> = ({ currencies }) => {
             </p>
             <div className="flex items-center gap-2">
               <label className="text-xs text-gray-500">Date:</label>
-              <input type="date" value={bulkDate} onChange={(e) => setBulkDate(e.target.value)} className={inputCls} />
+              <AppDatePicker value={bulkDate} onChange={(val) => setBulkDate(val)} maxToday />
             </div>
           </div>
           <div className="space-y-2">

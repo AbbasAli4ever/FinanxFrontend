@@ -9,6 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 import debitNotesService from "@/services/debitNotesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { DebitNote } from "@/types/debitNotes";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface DebitNoteDetailModalProps {
   isOpen: boolean;
@@ -46,6 +48,7 @@ const DebitNoteDetailModal: React.FC<DebitNoteDetailModalProps> = ({
   isOpen, debitNoteId, onClose, onEdit, onOpen, onApply, onRefund, onVoid, onDelete,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [dn, setDn] = useState<DebitNote | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -98,6 +101,13 @@ const DebitNoteDetailModal: React.FC<DebitNoteDetailModalProps> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-4 dark:border-gray-800">
+            <ExportButton
+              entityType="debit-note"
+              entityId={dn.id}
+              fileName={`DebitNote_${dn.debitNoteNumber}`}
+              token={token ?? ""}
+              canExport={hasPermission("data:export")}
+            />
             {dn.statusInfo.allowEdit && <Button size="sm" variant="outline" onClick={() => { onClose(); onEdit(dn.id); }}>Edit</Button>}
             {dn.statusInfo.allowOpen && <Button size="sm" onClick={() => { onClose(); onOpen(dn.id, dn.debitNoteNumber, dn.totalAmount); }}>Issue Debit Note</Button>}
             {dn.statusInfo.allowApply && <Button size="sm" variant="outline" onClick={() => { onClose(); onApply(dn.id, dn.debitNoteNumber, dn.vendor.id, dn.remainingDebit); }}>Apply to Bill</Button>}

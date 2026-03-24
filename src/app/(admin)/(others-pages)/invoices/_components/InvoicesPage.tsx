@@ -25,6 +25,8 @@ import SendInvoiceModal from "./SendInvoiceModal";
 import VoidInvoiceModal from "./VoidInvoiceModal";
 import RecordPaymentModal from "./RecordPaymentModal";
 import DeleteInvoiceModal from "./DeleteInvoiceModal";
+import { BulkExportButton } from "@/components/export/ExportButton";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 type AlertState = {
   variant: "success" | "error" | "warning";
@@ -37,7 +39,7 @@ const selectClasses =
 
 const InvoicesPage: React.FC = () => {
   const { token, isAuthenticated, isReady } = useAuth();
-  const { loading: permissionsLoading } = usePermissions();
+  const { loading: permissionsLoading, hasPermission } = usePermissions();
 
   const [invoices, setInvoices] = useState<InvoiceListItem[]>([]);
   const [pagination, setPagination] = useState({
@@ -62,6 +64,8 @@ const InvoicesPage: React.FC = () => {
   const [filters, setFilters] = useState({
     search: "",
     status: "",
+    dateFrom: "",
+    dateTo: "",
   });
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [searchInput, setSearchInput] = useState("");
@@ -92,6 +96,8 @@ const InvoicesPage: React.FC = () => {
         {
           search: filters.search || undefined,
           status: filters.status || undefined,
+          dateFrom: filters.dateFrom || undefined,
+          dateTo: filters.dateTo || undefined,
           sortBy: "createdAt",
           sortOrder: "desc",
           page: pagination.page.toString(),
@@ -118,7 +124,7 @@ const InvoicesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, filters.search, filters.status, pagination.page, pagination.limit]);
+  }, [token, filters.search, filters.status, filters.dateFrom, filters.dateTo, pagination.page, pagination.limit]);
 
   // Fetch summary
   const fetchSummary = useCallback(async () => {
@@ -355,23 +361,30 @@ const InvoicesPage: React.FC = () => {
             Create and manage customer invoices
           </p>
         </div>
-        <Button size="sm" onClick={createModal.openModal}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41421 13.6642 8.75 13.25 8.75H8.75V13.25C8.75 13.6642 8.41421 14 8 14C7.58579 14 7.25 13.6642 7.25 13.25V8.75H2.75C2.33579 8.75 2 8.41421 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.25V2.75C7.25 2.33579 7.58579 2 8 2Z"
-              fill="currentColor"
-            />
-          </svg>
-          New Invoice
-        </Button>
+        <div className="flex items-center gap-2">
+          <BulkExportButton
+            entityType="invoice"
+            token={token ?? ""}
+            canExport={hasPermission("data:export")}
+          />
+          <Button size="sm" onClick={createModal.openModal}>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41421 13.6642 8.75 13.25 8.75H8.75V13.25C8.75 13.6642 8.41421 14 8 14C7.58579 14 7.25 13.6642 7.25 13.25V8.75H2.75C2.33579 8.75 2 8.41421 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.25V2.75C7.25 2.33579 7.58579 2 8 2Z"
+                fill="currentColor"
+              />
+            </svg>
+            New Invoice
+          </Button>
+        </div>
       </header>
 
       {alert && (
@@ -388,8 +401,8 @@ const InvoicesPage: React.FC = () => {
       <InvoiceSummaryCards summary={summary} />
 
       {/* Filters */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[180px]">
           <svg
             className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
             fill="none"
@@ -431,6 +444,29 @@ const InvoicesPage: React.FC = () => {
           <option value="OVERDUE">Overdue</option>
           <option value="VOID">Void</option>
         </select>
+        <AppDatePicker
+          value={filters.dateFrom}
+          onChange={(val) => {
+            setFilters((p) => ({ ...p, dateFrom: val }));
+            setPagination((p) => ({ ...p, page: 1 }));
+          }}
+          placeholder="From date"
+          maxToday
+          max={filters.dateTo || undefined}
+          className="w-36"
+        />
+        <span className="text-gray-400 text-sm select-none">—</span>
+        <AppDatePicker
+          value={filters.dateTo}
+          onChange={(val) => {
+            setFilters((p) => ({ ...p, dateTo: val }));
+            setPagination((p) => ({ ...p, page: 1 }));
+          }}
+          placeholder="To date"
+          min={filters.dateFrom || undefined}
+          maxToday
+          className="w-36"
+        />
       </div>
 
       {/* Content */}

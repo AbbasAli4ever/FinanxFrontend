@@ -5,6 +5,7 @@ import { Modal } from "@/components/ui/modal";
 import Button from "@/components/ui/button/Button";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import Alert from "@/components/ui/alert/Alert";
 import { useAuth } from "@/context/AuthContext";
 import recurringService from "@/services/recurringService";
@@ -168,10 +169,10 @@ const EditSettingsModal: React.FC<EditSettingsModalProps> = ({
         {!noEndDate && (
           <div>
             <Label>End Date <span className="text-gray-400">(optional)</span></Label>
-            <Input
-              type="date"
+            <AppDatePicker
               value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={(val) => setEndDate(val)}
+              min={new Date().toISOString().slice(0, 10)}
             />
             <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">
               The recurring schedule will stop after this date.

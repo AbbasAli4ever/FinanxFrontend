@@ -9,6 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 import estimatesService from "@/services/estimatesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { Estimate } from "@/types/estimates";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface EstimateDetailModalProps {
   isOpen: boolean;
@@ -51,6 +53,7 @@ const EstimateDetailModal: React.FC<EstimateDetailModalProps> = ({
   isOpen, estimateId, onClose, onEdit, onSend, onAccept, onReject, onConvert, onVoid, onDelete, onDuplicated,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [est, setEst] = useState<Estimate | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -120,6 +123,13 @@ const EstimateDetailModal: React.FC<EstimateDetailModalProps> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-4 dark:border-gray-800">
+            <ExportButton
+              entityType="estimate"
+              entityId={est.id}
+              fileName={`Estimate_${est.estimateNumber}`}
+              token={token ?? ""}
+              canExport={hasPermission("data:export")}
+            />
             {est.statusInfo.allowEdit && (
               <Button size="sm" variant="outline" onClick={() => { onClose(); onEdit(est.id); }}>Edit</Button>
             )}

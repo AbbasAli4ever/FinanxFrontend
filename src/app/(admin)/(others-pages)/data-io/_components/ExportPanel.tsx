@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Label from "@/components/form/Label";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import dataIOService from "@/services/dataIOService";
@@ -147,22 +148,22 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ exportableEntities, token }) 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="start-date">Start Date</Label>
-                <input
+                <AppDatePicker
                   id="start-date"
-                  type="date"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="mt-1 h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                  onChange={(val) => setStartDate(val)}
+                  maxToday
+                  max={endDate}
                 />
               </div>
               <div>
                 <Label htmlFor="end-date">End Date</Label>
-                <input
+                <AppDatePicker
                   id="end-date"
-                  type="date"
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="mt-1 h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                  onChange={(val) => setEndDate(val)}
+                  min={startDate}
+                  maxToday
                 />
               </div>
             </div>

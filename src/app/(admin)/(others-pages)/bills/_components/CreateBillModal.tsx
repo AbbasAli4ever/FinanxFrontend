@@ -17,6 +17,7 @@ import type { ProductListItem } from "@/types/products";
 import type { RecurringFrequency } from "@/types/recurring";
 import type { Currency } from "@/types/currency";
 import CurrencySelector from "@/components/currency/CurrencySelector";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 const RECURRING_FREQUENCIES: { value: RecurringFrequency; label: string }[] = [
   { value: "DAILY", label: "Daily" },
@@ -406,11 +407,11 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
               <Label htmlFor="cb-date">
                 Bill Date <span className="text-error-500">*</span>
               </Label>
-              <Input
+              <AppDatePicker
                 id="cb-date"
-                type="date"
                 value={billDate}
-                onChange={(e) => setBillDate(e.target.value)}
+                onChange={(val) => setBillDate(val)}
+                maxToday
               />
             </div>
 
@@ -432,11 +433,11 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
 
             <div>
               <Label htmlFor="cb-due">Due Date</Label>
-              <Input
+              <AppDatePicker
                 id="cb-due"
-                type="date"
                 value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
+                onChange={(val) => setDueDate(val)}
+                min={billDate}
                 disabled={paymentTerms !== "CUSTOM"}
               />
             </div>
@@ -725,11 +726,10 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
                 </div>
                 <div>
                   <Label>End Date <span className="text-gray-400 text-xs font-normal">(optional)</span></Label>
-                  <Input
-                    type="date"
+                  <AppDatePicker
                     value={recurringEndDate}
-                    onChange={(e) => setRecurringEndDate(e.target.value)}
-                    placeholder="No end date"
+                    onChange={(val) => setRecurringEndDate(val)}
+                    min={billDate}
                   />
                 </div>
                 <div className="col-span-full rounded-lg border border-brand-100 bg-brand-50/60 px-3 py-2.5 dark:border-brand-800 dark:bg-brand-900/10">

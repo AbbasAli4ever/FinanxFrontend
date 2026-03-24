@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import auditService from "@/services/auditService";
 import type {
   AuditLogItem,
@@ -214,21 +215,19 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, onChange, onReset }) => 
       </select>
 
       {/* Date from */}
-      <input
-        type="date"
+      <AppDatePicker
         value={filters.dateFrom ?? ""}
-        onChange={(e) => onChange({ dateFrom: e.target.value || undefined, page: 1 })}
-        className={selectCls + " pr-3"}
-        title="From date"
+        onChange={(val) => onChange({ dateFrom: val || undefined, page: 1 })}
+        maxToday
+        max={filters.dateTo ?? ""}
       />
 
       {/* Date to */}
-      <input
-        type="date"
+      <AppDatePicker
         value={filters.dateTo ?? ""}
-        onChange={(e) => onChange({ dateTo: e.target.value || undefined, page: 1 })}
-        className={selectCls + " pr-3"}
-        title="To date"
+        onChange={(val) => onChange({ dateTo: val || undefined, page: 1 })}
+        min={filters.dateFrom ?? ""}
+        maxToday
       />
 
       {/* Reset */}

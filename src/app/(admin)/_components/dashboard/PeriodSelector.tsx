@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import type { PeriodPreset, PeriodParams } from "@/types/dashboard";
 
 const PRESETS: { value: PeriodPreset; label: string }[] = [
@@ -43,18 +44,18 @@ const PeriodSelector: React.FC<Props> = ({ value, onChange }) => {
 
       {isCustom && (
         <>
-          <input
-            type="date"
+          <AppDatePicker
             value={value.startDate ?? ""}
-            onChange={(e) => onChange({ ...value, startDate: e.target.value })}
-            className="h-9 rounded border border-gray-300 bg-white px-3 text-[13px] text-gray-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors dark:border-gray-600 dark:bg-gray-800 dark:text-white/90"
+            onChange={(val) => onChange({ ...value, startDate: val })}
+            max={value.endDate ?? ""}
+            maxToday
           />
           <span className="text-[13px] text-gray-400">to</span>
-          <input
-            type="date"
+          <AppDatePicker
             value={value.endDate ?? ""}
-            onChange={(e) => onChange({ ...value, endDate: e.target.value })}
-            className="h-9 rounded border border-gray-300 bg-white px-3 text-[13px] text-gray-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors dark:border-gray-600 dark:bg-gray-800 dark:text-white/90"
+            onChange={(val) => onChange({ ...value, endDate: val })}
+            min={value.startDate ?? ""}
+            maxToday
           />
         </>
       )}

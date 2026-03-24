@@ -8,6 +8,7 @@ import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import TextArea from "@/components/form/input/TextArea";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import debitNotesService from "@/services/debitNotesService";
 import billsService from "@/services/billsService";
 import accountsService from "@/services/accountsService";
@@ -203,7 +204,7 @@ const CreateDebitNoteModal: React.FC<CreateDebitNoteModalProps> = ({
           </div>
           <div>
             <Label>Date <span className="text-error-500">*</span></Label>
-            <Input type="date" value={debitNoteDate} onChange={(e) => setDebitNoteDate(e.target.value)} />
+            <AppDatePicker value={debitNoteDate} onChange={(val) => setDebitNoteDate(val)} maxToday />
           </div>
         </div>
 

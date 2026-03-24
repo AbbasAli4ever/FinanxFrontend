@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import timeEntriesService from "@/services/timeEntriesService";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import projectsService from "@/services/projectsService";
 import type { CreateTimeEntryRequest } from "@/types/projects";
 import type { Project } from "@/types/projects";
@@ -106,7 +107,7 @@ const LogTimeModal: React.FC<Props> = ({ isOpen, onClose, onCreated, preselected
           {/* Date */}
           <div>
             <label className={labelCls}>Date <span className="text-error-500">*</span></label>
-            <input type="date" required value={form.date} onChange={(e) => set("date", e.target.value)} className={inputCls} />
+            <AppDatePicker value={form.date} onChange={(val) => set("date", val)} maxToday />
           </div>
 
           {/* Duration mode toggle */}

@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import invoicesService from "@/services/invoicesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { PaymentMethod } from "@/types/invoices";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 interface RecordPaymentModalProps {
   isOpen: boolean;
@@ -168,13 +169,13 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
           <Label htmlFor="payDate">
             Payment Date <span className="text-error-500">*</span>
           </Label>
-          <Input
+          <AppDatePicker
             id="payDate"
-            type="date"
             value={form.paymentDate}
-            onChange={(e) =>
-              setForm({ ...form, paymentDate: e.target.value })
+            onChange={(val) =>
+              setForm({ ...form, paymentDate: val })
             }
+            maxToday
           />
         </div>
 

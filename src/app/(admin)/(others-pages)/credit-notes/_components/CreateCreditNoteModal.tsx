@@ -8,6 +8,7 @@ import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import TextArea from "@/components/form/input/TextArea";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import creditNotesService from "@/services/creditNotesService";
 import invoicesService from "@/services/invoicesService";
 import accountsService from "@/services/accountsService";
@@ -214,7 +215,7 @@ const CreateCreditNoteModal: React.FC<CreateCreditNoteModalProps> = ({
           </div>
           <div>
             <Label>Date <span className="text-error-500">*</span></Label>
-            <Input type="date" value={creditNoteDate} onChange={(e) => setCreditNoteDate(e.target.value)} />
+            <AppDatePicker value={creditNoteDate} onChange={(val) => setCreditNoteDate(val)} maxToday />
           </div>
         </div>
 

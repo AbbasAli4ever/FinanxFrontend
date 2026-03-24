@@ -9,6 +9,9 @@ import { useAuth } from "@/context/AuthContext";
 import expensesService from "@/services/expensesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { Expense, ExpenseStatus, ExpenseStatusInfo } from "@/types/expenses";
+import AttachmentsPanel from "@/components/documents/AttachmentsPanel";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface ExpenseDetailModalProps {
   isOpen: boolean;
@@ -85,6 +88,7 @@ const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
   onDelete,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [expense, setExpense] = useState<Expense | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -178,6 +182,13 @@ const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
                   Delete
                 </Button>
               )}
+              <ExportButton
+                entityType="expense"
+                entityId={expense.id}
+                fileName={`Expense_${expense.expenseNumber}`}
+                token={token ?? ""}
+                canExport={hasPermission("data:export")}
+              />
             </div>
           </div>
 
@@ -495,6 +506,11 @@ const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Attachments */}
+          <div className="mt-6 border-t border-gray-200 pt-5 dark:border-gray-700">
+            <AttachmentsPanel entityType="EXPENSE" entityId={expense.id} />
           </div>
 
           {/* Footer */}

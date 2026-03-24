@@ -9,6 +9,9 @@ import { useAuth } from "@/context/AuthContext";
 import billsService from "@/services/billsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { Bill, BillStatus } from "@/types/bills";
+import AttachmentsPanel from "@/components/documents/AttachmentsPanel";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface BillDetailModalProps {
   isOpen: boolean;
@@ -58,6 +61,7 @@ const BillDetailModal: React.FC<BillDetailModalProps> = ({
   onDelete,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [bill, setBill] = useState<Bill | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -249,6 +253,11 @@ const BillDetailModal: React.FC<BillDetailModalProps> = ({
               </div>
             )}
 
+            {/* Attachments */}
+            <div className="border-t border-gray-200 pt-5 dark:border-gray-700">
+              <AttachmentsPanel entityType="BILL" entityId={bill.id} />
+            </div>
+
             {/* Timestamps */}
             <div className="grid grid-cols-2 gap-4 text-xs text-gray-400 sm:grid-cols-4">
               {bill.paymentAccount && <div><p className="font-medium">Payment Account</p><p>{bill.paymentAccount.code} - {bill.paymentAccount.name}</p></div>}
@@ -260,6 +269,13 @@ const BillDetailModal: React.FC<BillDetailModalProps> = ({
 
           {/* Action Buttons */}
           <div className="mt-6 flex flex-wrap items-center justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+            <ExportButton
+              entityType="bill"
+              entityId={bill.id}
+              fileName={`Bill_${bill.billNumber}`}
+              token={token ?? ""}
+              canExport={hasPermission("data:export")}
+            />
             {si?.allowEdit && <Button variant="outline" size="sm" onClick={() => { onClose(); onEdit(bill.id); }}>Edit</Button>}
             {si?.allowReceive && <Button size="sm" onClick={() => { onClose(); onReceive(bill.id, bill.billNumber); }}>Receive Bill</Button>}
             {si?.allowPayment && <Button size="sm" onClick={() => { onClose(); onRecordPayment(bill.id, bill.billNumber, bill.amountDue); }}>Record Payment</Button>}

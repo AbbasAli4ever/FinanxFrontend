@@ -3,6 +3,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Button from "@/components/ui/button/Button";
 import { useAuth } from "@/context/AuthContext";
+import { usePermissions } from "@/context/PermissionsContext";
+import { BulkExportButton } from "@/components/export/ExportButton";
 import purchaseOrdersService from "@/services/purchaseOrdersService";
 import vendorsService from "@/services/vendorsService";
 import accountsService from "@/services/accountsService";
@@ -22,6 +24,7 @@ import ReceiveItemsModal from "./ReceiveItemsModal";
 import ConvertToBillModal from "./ConvertToBillModal";
 import ClosePurchaseOrderModal from "./ClosePurchaseOrderModal";
 import VoidPurchaseOrderModal from "./VoidPurchaseOrderModal";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 const STATUS_TABS = [
   { label: "All", value: "" },
@@ -37,6 +40,7 @@ const PAGE_SIZE = 20;
 
 const PurchaseOrdersPage: React.FC = () => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
 
   // Data
   const [summary, setSummary] = useState<POSummary | null>(null);
@@ -56,6 +60,8 @@ const PurchaseOrdersPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const searchTimeout = useRef<ReturnType<typeof setTimeout>>(null);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   // Modal state
   const [createOpen, setCreateOpen] = useState(false);
@@ -112,6 +118,8 @@ const PurchaseOrdersPage: React.FC = () => {
     purchaseOrdersService.getPurchaseOrders({
       status: activeStatus || undefined,
       search: search || undefined,
+      dateFrom: dateFrom || undefined,
+      dateTo: dateTo || undefined,
       page: String(pg),
       limit: String(PAGE_SIZE),
       sortBy: "createdAt",
@@ -123,7 +131,7 @@ const PurchaseOrdersPage: React.FC = () => {
       })
       .catch(() => {})
       .finally(() => setTableLoading(false));
-  }, [token, activeStatus, search]);
+  }, [token, activeStatus, search, dateFrom, dateTo]);
 
   useEffect(() => { fetchSummary(); }, [fetchSummary]);
 
@@ -165,15 +173,22 @@ const PurchaseOrdersPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Purchase Orders</h1>
           <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Manage vendor purchase orders and track deliveries</p>
         </div>
-        <Button
-          onClick={() => setCreateOpen(true)}
-          disabled={refLoading}
-        >
-          <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          New Purchase Order
-        </Button>
+        <div className="flex items-center gap-2">
+          <BulkExportButton
+            entityType="purchase-order"
+            token={token ?? ""}
+            canExport={hasPermission("data:export")}
+          />
+          <Button
+            onClick={() => setCreateOpen(true)}
+            disabled={refLoading}
+          >
+            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            New Purchase Order
+          </Button>
+        </div>
       </div>
 
       {/* Summary Cards */}
@@ -196,17 +211,36 @@ const PurchaseOrdersPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Search */}
-        <div className="relative">
-          <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Search PO #, vendor..."
-            className="w-full rounded-xl border border-gray-300 bg-white py-2 pl-9 pr-4 text-sm text-gray-900 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white sm:w-64"
+        {/* Search + Date Range */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Search PO #, vendor..."
+              className="w-full rounded-xl border border-gray-300 bg-white py-2 pl-9 pr-4 text-sm text-gray-900 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white sm:w-64"
+            />
+          </div>
+          <AppDatePicker
+            value={dateFrom}
+            onChange={(val) => { setDateFrom(val); setPage(1); }}
+            placeholder="From date"
+            maxToday
+            max={dateTo || undefined}
+            className="w-36"
+          />
+          <span className="text-gray-400 text-sm select-none">—</span>
+          <AppDatePicker
+            value={dateTo}
+            onChange={(val) => { setDateTo(val); setPage(1); }}
+            placeholder="To date"
+            min={dateFrom || undefined}
+            maxToday
+            className="w-36"
           />
         </div>
       </div>

@@ -6,6 +6,7 @@ import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import TextArea from "@/components/form/input/TextArea";
 import { useAuth } from "@/context/AuthContext";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import salesOrdersService from "@/services/salesOrdersService";
 import productsService from "@/services/productsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
@@ -237,11 +238,11 @@ const EditSalesOrderModal: React.FC<Props> = ({
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Order Date <span className="text-error-500">*</span></label>
-              <input type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} className={inputCls} />
+              <AppDatePicker value={orderDate} onChange={(val) => setOrderDate(val)} maxToday />
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Expected Delivery</label>
-              <input type="date" value={expectedDeliveryDate} onChange={(e) => setExpectedDeliveryDate(e.target.value)} className={inputCls} />
+              <AppDatePicker value={expectedDeliveryDate} onChange={(val) => setExpectedDeliveryDate(val)} min={orderDate} />
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Terms</label>

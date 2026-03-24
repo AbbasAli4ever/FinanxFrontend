@@ -12,6 +12,7 @@ import estimatesService from "@/services/estimatesService";
 import productsService from "@/services/productsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { DiscountType, PaymentTerms } from "@/types/estimates";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 interface CreateEstimateModalProps {
   isOpen: boolean;
@@ -198,11 +199,11 @@ const CreateEstimateModal: React.FC<CreateEstimateModalProps> = ({
           </div>
           <div>
             <Label>Estimate Date <span className="text-error-500">*</span></Label>
-            <Input type="date" value={estimateDate} onChange={(e) => setEstimateDate(e.target.value)} />
+            <AppDatePicker value={estimateDate} onChange={(val) => setEstimateDate(val)} maxToday />
           </div>
           <div>
             <Label>Expiration Date</Label>
-            <Input type="date" value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} />
+            <AppDatePicker value={expirationDate} onChange={(val) => setExpirationDate(val)} min={estimateDate} />
           </div>
           <div>
             <Label>Payment Terms</Label>

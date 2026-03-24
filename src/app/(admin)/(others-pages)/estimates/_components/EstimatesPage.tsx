@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useAuth } from "@/context/AuthContext";
+import { usePermissions } from "@/context/PermissionsContext";
+import { BulkExportButton } from "@/components/export/ExportButton";
 import { useModal } from "@/hooks/useModal";
 import estimatesService from "@/services/estimatesService";
 import customersService from "@/services/customersService";
@@ -22,6 +24,7 @@ import RejectEstimateModal from "./RejectEstimateModal";
 import ConvertToInvoiceModal from "./ConvertToInvoiceModal";
 import VoidEstimateModal from "./VoidEstimateModal";
 import DeleteEstimateModal from "./DeleteEstimateModal";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 type AlertState = { variant: "error" | "warning" | "success" | "info"; title: string; message: string };
 
@@ -39,6 +42,7 @@ const STATUS_TABS = [
 
 const EstimatesPage: React.FC = () => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
 
   // Data state
   const [estimates, setEstimates] = useState<EstimateListItem[]>([]);
@@ -57,6 +61,8 @@ const EstimatesPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
   const searchDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   // Selected context
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -82,6 +88,8 @@ const EstimatesPage: React.FC = () => {
       const data = await estimatesService.getEstimates({
         status: statusFilter || undefined,
         search: searchFilter || undefined,
+        dateFrom: dateFrom || undefined,
+        dateTo: dateTo || undefined,
         sortBy: "estimateDate",
         sortOrder: "desc",
         page: String(page),
@@ -94,7 +102,7 @@ const EstimatesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, statusFilter, searchFilter, pagination.limit]);
+  }, [token, statusFilter, searchFilter, dateFrom, dateTo, pagination.limit]);
 
   const fetchSummary = useCallback(async () => {
     if (!token) return;
@@ -128,7 +136,7 @@ const EstimatesPage: React.FC = () => {
     fetchSummary();
   }, [fetchEstimates, fetchSummary]);
 
-  useEffect(() => { fetchEstimates(1); }, [statusFilter, searchFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchEstimates(1); }, [statusFilter, searchFilter, dateFrom, dateTo]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { fetchSummary(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { fetchReferenceData(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -188,6 +196,11 @@ const EstimatesPage: React.FC = () => {
           <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Create and manage quotes for customers</p>
         </div>
         <div className="flex items-center gap-2">
+          <BulkExportButton
+            entityType="estimate"
+            token={token ?? ""}
+            canExport={hasPermission("data:export")}
+          />
           <Button variant="outline" size="sm" onClick={handleExpireOverdue} disabled={expiringLoading}>
             {expiringLoading ? "Processing..." : "Expire Overdue"}
           </Button>
@@ -230,17 +243,36 @@ const EstimatesPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Search */}
-        <div className="relative w-full sm:w-64">
-          <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Search estimates..."
-            className="h-9 w-full rounded-lg border border-gray-300 pl-9 pr-4 text-sm placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        {/* Search + Date Range */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative w-full sm:w-64">
+            <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Search estimates..."
+              className="h-9 w-full rounded-lg border border-gray-300 pl-9 pr-4 text-sm placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+            />
+          </div>
+          <AppDatePicker
+            value={dateFrom}
+            onChange={(val) => { setDateFrom(val); }}
+            placeholder="From date"
+            maxToday
+            max={dateTo || undefined}
+            className="w-36"
+          />
+          <span className="text-gray-400 text-sm select-none">—</span>
+          <AppDatePicker
+            value={dateTo}
+            onChange={(val) => { setDateTo(val); }}
+            placeholder="To date"
+            min={dateFrom || undefined}
+            maxToday
+            className="w-36"
           />
         </div>
       </div>

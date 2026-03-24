@@ -9,6 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 import creditNotesService from "@/services/creditNotesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { CreditNote } from "@/types/creditNotes";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface CreditNoteDetailModalProps {
   isOpen: boolean;
@@ -54,6 +56,7 @@ const CreditNoteDetailModal: React.FC<CreditNoteDetailModalProps> = ({
   onDelete,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [cn, setCn] = useState<CreditNote | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -109,6 +112,13 @@ const CreditNoteDetailModal: React.FC<CreditNoteDetailModalProps> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-4 dark:border-gray-800">
+            <ExportButton
+              entityType="credit-note"
+              entityId={cn.id}
+              fileName={`CreditNote_${cn.creditNoteNumber}`}
+              token={token ?? ""}
+              canExport={hasPermission("data:export")}
+            />
             {cn.statusInfo.allowEdit && (
               <Button size="sm" variant="outline" onClick={() => { onClose(); onEdit(cn.id); }}>Edit</Button>
             )}

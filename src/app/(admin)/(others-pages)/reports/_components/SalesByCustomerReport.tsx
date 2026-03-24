@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import Button from "@/components/ui/button/Button";
 import Label from "@/components/form/Label";
-import Input from "@/components/form/input/InputField";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import Alert from "@/components/ui/alert/Alert";
 import { useAuth } from "@/context/AuthContext";
 import reportsService from "@/services/reportsService";
@@ -211,11 +211,11 @@ const SalesByCustomerReport: React.FC = () => {
         </div>
         <div className="w-full sm:w-44">
           <Label>Start Date</Label>
-          <Input type="date" value={startDate} onChange={(e) => { setStartDate(e.target.value); setPreset("CUSTOM"); }} />
+          <AppDatePicker value={startDate} onChange={(val) => { setStartDate(val); setPreset("CUSTOM"); }} maxToday max={endDate} />
         </div>
         <div className="w-full sm:w-44">
           <Label>End Date</Label>
-          <Input type="date" value={endDate} onChange={(e) => { setEndDate(e.target.value); setPreset("CUSTOM"); }} />
+          <AppDatePicker value={endDate} onChange={(val) => { setEndDate(val); setPreset("CUSTOM"); }} min={startDate} maxToday />
         </div>
         <Button size="sm" onClick={fetchReport} disabled={loading}>
           {loading ? "Loading..." : "Generate"}

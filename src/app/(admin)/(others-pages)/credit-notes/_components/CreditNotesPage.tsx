@@ -8,6 +8,7 @@ import Alert from "@/components/ui/alert/Alert";
 import Button from "@/components/ui/button/Button";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import { isPermissionDeniedError, getPermissionDeniedMessage } from "@/services/apiClient";
+import { BulkExportButton } from "@/components/export/ExportButton";
 import creditNotesService from "@/services/creditNotesService";
 import customersService from "@/services/customersService";
 import accountsService from "@/services/accountsService";
@@ -23,6 +24,7 @@ import ApplyCreditNoteModal from "./ApplyCreditNoteModal";
 import RefundCreditNoteModal from "./RefundCreditNoteModal";
 import VoidCreditNoteModal from "./VoidCreditNoteModal";
 import DeleteCreditNoteModal from "./DeleteCreditNoteModal";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 type AlertState = { variant: "success" | "error" | "warning"; title: string; message: string };
 
@@ -40,7 +42,7 @@ const STATUS_TABS = [
 
 const CreditNotesPage: React.FC = () => {
   const { token, isAuthenticated, isReady } = useAuth();
-  const { loading: permissionsLoading } = usePermissions();
+  const { loading: permissionsLoading, hasPermission } = usePermissions();
 
   const [creditNotes, setCreditNotes] = useState<CreditNoteListItem[]>([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 50, totalPages: 1 });
@@ -55,6 +57,8 @@ const CreditNotesPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   // Modal state
   const createModal = useModal();
@@ -79,7 +83,7 @@ const CreditNotesPage: React.FC = () => {
     setLoading(true);
     try {
       const data = await creditNotesService.getCreditNotes(
-        { status: statusFilter || undefined, search: searchFilter || undefined, sortBy: "creditNoteDate", sortOrder: "desc", page: pagination.page.toString(), limit: pagination.limit.toString() },
+        { status: statusFilter || undefined, search: searchFilter || undefined, dateFrom: dateFrom || undefined, dateTo: dateTo || undefined, sortBy: "creditNoteDate", sortOrder: "desc", page: pagination.page.toString(), limit: pagination.limit.toString() },
         token
       );
       setCreditNotes(data.items ?? []);
@@ -93,7 +97,7 @@ const CreditNotesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, statusFilter, searchFilter, pagination.page, pagination.limit]);
+  }, [token, statusFilter, searchFilter, dateFrom, dateTo, pagination.page, pagination.limit]);
 
   const fetchSummary = useCallback(async () => {
     if (!token) return;
@@ -175,12 +179,19 @@ const CreditNotesPage: React.FC = () => {
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Credit Notes</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">Issue credits and refunds to customers</p>
         </div>
-        <Button size="sm" onClick={createModal.openModal}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" clipRule="evenodd" d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41421 13.6642 8.75 13.25 8.75H8.75V13.25C8.75 13.6642 8.41421 14 8 14C7.58579 14 7.25 13.6642 7.25 13.25V8.75H2.75C2.33579 8.75 2 8.41421 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.25V2.75C7.25 2.33579 7.58579 2 8 2Z" fill="currentColor" />
-          </svg>
-          New Credit Note
-        </Button>
+        <div className="flex items-center gap-2">
+          <BulkExportButton
+            entityType="credit-note"
+            token={token ?? ""}
+            canExport={hasPermission("data:export")}
+          />
+          <Button size="sm" onClick={createModal.openModal}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41421 13.6642 8.75 13.25 8.75H8.75V13.25C8.75 13.6642 8.41421 14 8 14C7.58579 14 7.25 13.6642 7.25 13.25V8.75H2.75C2.33579 8.75 2 8.41421 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.25V2.75C7.25 2.33579 7.58579 2 8 2Z" fill="currentColor" />
+            </svg>
+            New Credit Note
+          </Button>
+        </div>
       </header>
 
       {alert && (
@@ -209,16 +220,41 @@ const CreditNotesPage: React.FC = () => {
             </button>
           ))}
         </div>
-        <div className="relative">
-          <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            type="text"
-            placeholder="Search credit notes..."
-            value={searchInput}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative flex-1 min-w-[180px]">
+            <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search credit notes..."
+              value={searchInput}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+            />
+          </div>
+          <AppDatePicker
+            value={dateFrom}
+            onChange={(val) => {
+              setDateFrom(val);
+              setPagination((p) => ({ ...p, page: 1 }));
+            }}
+            placeholder="From date"
+            maxToday
+            max={dateTo || undefined}
+            className="w-36"
+          />
+          <span className="text-gray-400 text-sm select-none">—</span>
+          <AppDatePicker
+            value={dateTo}
+            onChange={(val) => {
+              setDateTo(val);
+              setPagination((p) => ({ ...p, page: 1 }));
+            }}
+            placeholder="To date"
+            min={dateFrom || undefined}
+            maxToday
+            className="w-36"
           />
         </div>
       </div>

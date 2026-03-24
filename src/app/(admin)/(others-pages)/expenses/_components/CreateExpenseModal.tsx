@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import expensesService from "@/services/expensesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { PaymentMethod, RecurringFrequency, CreateExpenseLineItemRequest } from "@/types/expenses";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 interface SplitLineItem {
   key: string;
@@ -306,10 +307,10 @@ const CreateExpenseModal: React.FC<CreateExpenseModalProps> = ({
             <Label>
               Expense Date <span className="text-error-500">*</span>
             </Label>
-            <Input
-              type="date"
+            <AppDatePicker
               value={expenseDate}
-              onChange={(e) => setExpenseDate(e.target.value)}
+              onChange={(val) => setExpenseDate(val)}
+              maxToday
             />
           </div>
           <div>
@@ -595,10 +596,10 @@ const CreateExpenseModal: React.FC<CreateExpenseModalProps> = ({
               </div>
               <div>
                 <Label>End Date</Label>
-                <Input
-                  type="date"
+                <AppDatePicker
                   value={recurringEndDate}
-                  onChange={(e) => setRecurringEndDate(e.target.value)}
+                  onChange={(val) => setRecurringEndDate(val)}
+                  min={expenseDate}
                 />
               </div>
             </div>

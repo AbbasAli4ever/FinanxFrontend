@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import { useAuth } from "@/context/AuthContext";
 import inventoryService from "@/services/inventoryService";
 import type { ProductStockCard, StockSummaryItem, InventoryMovement, TransactionType } from "@/types/inventory";
@@ -177,18 +178,18 @@ const StockCardModal: React.FC<Props> = ({ isOpen, product, onClose }) => {
         {/* Date filter */}
         <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
           <span className="text-sm text-gray-500 dark:text-gray-400">Filter:</span>
-          <input
-            type="date"
+          <AppDatePicker
             value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 outline-none focus:border-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            onChange={(val) => setDateFrom(val)}
+            maxToday
+            max={dateTo}
           />
           <span className="text-gray-400">—</span>
-          <input
-            type="date"
+          <AppDatePicker
             value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 outline-none focus:border-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            onChange={(val) => setDateTo(val)}
+            min={dateFrom}
+            maxToday
           />
           <button
             onClick={handleFilterApply}

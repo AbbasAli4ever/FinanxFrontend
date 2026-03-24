@@ -9,6 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 import salesOrdersService from "@/services/salesOrdersService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { SalesOrder, SOStatus } from "@/types/salesOrders";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface Props {
   isOpen: boolean;
@@ -55,6 +57,7 @@ const SalesOrderDetailModal: React.FC<Props> = ({
   isOpen, soId, onClose, onEdit, onSend, onConfirm, onFulfill, onConvert, onClose2, onVoid, onDelete, onDuplicated,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [so, setSo] = useState<SalesOrder | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -135,6 +138,13 @@ const SalesOrderDetailModal: React.FC<Props> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-4 dark:border-gray-800">
+            <ExportButton
+              entityType="sales-order"
+              entityId={so.id}
+              fileName={`SO_${so.soNumber}`}
+              token={token ?? ""}
+              canExport={hasPermission("data:export")}
+            />
             {so.statusInfo.allowEdit && (
               <Button size="sm" variant="outline" onClick={() => { onClose(); onEdit(so.id); }}>Edit</Button>
             )}

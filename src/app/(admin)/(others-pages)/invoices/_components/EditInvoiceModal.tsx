@@ -13,6 +13,7 @@ import productsService from "@/services/productsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { Invoice, PaymentTerms, DiscountType } from "@/types/invoices";
 import type { ProductListItem } from "@/types/products";
+import AppDatePicker from "@/components/form/AppDatePicker";
 
 interface LineItem {
   key: string;
@@ -366,11 +367,11 @@ const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
                 <Label htmlFor="ei-date">
                   Invoice Date <span className="text-error-500">*</span>
                 </Label>
-                <Input
+                <AppDatePicker
                   id="ei-date"
-                  type="date"
                   value={invoiceDate}
-                  onChange={(e) => setInvoiceDate(e.target.value)}
+                  onChange={(val) => setInvoiceDate(val)}
+                  maxToday
                 />
               </div>
 
@@ -392,11 +393,11 @@ const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
 
               <div>
                 <Label htmlFor="ei-due">Due Date</Label>
-                <Input
+                <AppDatePicker
                   id="ei-due"
-                  type="date"
                   value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
+                  onChange={(val) => setDueDate(val)}
+                  min={invoiceDate}
                   disabled={paymentTerms !== "CUSTOM"}
                 />
               </div>

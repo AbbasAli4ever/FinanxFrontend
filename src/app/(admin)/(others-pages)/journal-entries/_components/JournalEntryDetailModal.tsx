@@ -9,6 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 import journalEntriesService from "@/services/journalEntriesService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { JournalEntry, JournalEntryStatus, JournalEntryType, JournalEntryStatusInfo } from "@/types/journalEntries";
+import { ExportButton } from "@/components/export/ExportButton";
+import { usePermissions } from "@/context/PermissionsContext";
 
 interface JournalEntryDetailModalProps {
   isOpen: boolean;
@@ -87,6 +89,7 @@ const JournalEntryDetailModal: React.FC<JournalEntryDetailModalProps> = ({
   onDelete,
 }) => {
   const { token } = useAuth();
+  const { hasPermission } = usePermissions();
   const [entry, setEntry] = useState<JournalEntry | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -140,6 +143,13 @@ const JournalEntryDetailModal: React.FC<JournalEntryDetailModalProps> = ({
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
+              <ExportButton
+                entityType="journal-entry"
+                entityId={entry.id}
+                fileName={`JournalEntry_${entry.entryNumber}`}
+                token={token ?? ""}
+                canExport={hasPermission("data:export")}
+              />
               {si?.allowEdit && (
                 <Button variant="outline" size="sm" onClick={() => { onClose(); onEdit(entry.id); }}>
                   Edit

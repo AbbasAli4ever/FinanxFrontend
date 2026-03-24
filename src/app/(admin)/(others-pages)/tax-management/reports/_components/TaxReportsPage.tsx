@@ -10,6 +10,7 @@ import {
   getPermissionDeniedMessage,
 } from "@/services/apiClient";
 import { formatApiErrorMessage } from "@/utils/apiError";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import taxesService from "@/services/taxesService";
 import type { TaxSummary, TaxByRateReport, Vendor1099Report } from "@/types/taxes";
 
@@ -226,18 +227,18 @@ export default function TaxReportsPage() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <input
-              type="date"
+            <AppDatePicker
               value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="h-9 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm text-gray-800 dark:text-white focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/10"
+              onChange={(val) => setStartDate(val)}
+              maxToday
+              max={endDate}
             />
             <span className="text-gray-400 text-sm">→</span>
-            <input
-              type="date"
+            <AppDatePicker
               value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="h-9 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm text-gray-800 dark:text-white focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/10"
+              onChange={(val) => setEndDate(val)}
+              min={startDate}
+              maxToday
             />
             <button
               onClick={handleApplyDates}

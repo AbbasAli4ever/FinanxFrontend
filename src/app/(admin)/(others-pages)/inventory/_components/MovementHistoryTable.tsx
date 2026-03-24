@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import { useAuth } from "@/context/AuthContext";
 import inventoryService from "@/services/inventoryService";
 import type { InventoryMovement, MovementsFilters, TransactionType, StockSummaryItem } from "@/types/inventory";
@@ -193,20 +194,20 @@ const MovementHistoryTable: React.FC<Props> = ({ products }) => {
           </select>
 
           {/* Date From */}
-          <input
-            type="date"
+          <AppDatePicker
             value={dateFrom}
-            onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
-            className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-900 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            onChange={(val) => { setDateFrom(val); setPage(1); }}
+            maxToday
+            max={dateTo}
           />
 
           {/* Date To */}
           <div className="flex gap-2">
-            <input
-              type="date"
+            <AppDatePicker
               value={dateTo}
-              onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
-              className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-900 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+              onChange={(val) => { setDateTo(val); setPage(1); }}
+              min={dateFrom}
+              maxToday
             />
             {hasFilters && (
               <button

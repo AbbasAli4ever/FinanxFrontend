@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import Button from "@/components/ui/button/Button";
 import Label from "@/components/form/Label";
-import Input from "@/components/form/input/InputField";
+import AppDatePicker from "@/components/form/AppDatePicker";
 import Alert from "@/components/ui/alert/Alert";
 import Badge from "@/components/ui/badge/Badge";
 import { useAuth } from "@/context/AuthContext";
@@ -131,7 +131,7 @@ const BalanceSheetReport: React.FC = () => {
       <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-white/[0.03] sm:flex-row sm:items-end">
         <div className="flex-1 max-w-xs">
           <Label>As of Date</Label>
-          <Input type="date" value={asOfDate} onChange={(e) => setAsOfDate(e.target.value)} />
+          <AppDatePicker value={asOfDate} onChange={(val) => setAsOfDate(val)} maxToday />
         </div>
         <Button size="sm" onClick={fetchReport} disabled={loading}>
           {loading ? "Loading..." : "Generate"}
