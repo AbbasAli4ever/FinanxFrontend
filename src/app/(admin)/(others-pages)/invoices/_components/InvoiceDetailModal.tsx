@@ -121,7 +121,7 @@ const InvoiceDetailModal: React.FC<InvoiceDetailModalProps> = ({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-auto space-y-6 pr-1">
+          <div className="space-y-6">
             {/* Invoice Info Grid */}
             <div className="grid grid-cols-2 gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:grid-cols-4 dark:border-gray-700 dark:bg-gray-800/50">
               <div>

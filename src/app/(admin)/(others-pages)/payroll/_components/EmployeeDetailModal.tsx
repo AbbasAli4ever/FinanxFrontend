@@ -157,7 +157,7 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl mx-4 my-6 max-h-[90vh] overflow-y-auto">
+    <Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl p-6 lg:p-8">
       <div className="p-6">
         {loading ? (
           <div className="flex items-center justify-center py-12">

@@ -174,7 +174,6 @@ const EditDebitNoteModal: React.FC<EditDebitNoteModalProps> = ({
       await debitNotesService.updateDebitNote(debitNoteId, {
         vendorId,
         billId: billId || undefined,
-        debitNoteNumber: debitNoteNumber || undefined,
         referenceNumber: referenceNumber || undefined,
         debitNoteDate,
         discountType: discountType || undefined,
@@ -221,7 +220,7 @@ const EditDebitNoteModal: React.FC<EditDebitNoteModalProps> = ({
                   {billsList.map((b) => <option key={b.id} value={b.id}>{b.billNumber} ({formatCurrency(b.amountDue)} due)</option>)}
                 </select>
               </div>
-              <div><Label>Debit Note #</Label><Input value={debitNoteNumber} onChange={(e) => setDebitNoteNumber(e.target.value)} placeholder="DN-0001" /></div>
+              <div><Label>Debit Note #</Label><Input value={debitNoteNumber} disabled placeholder="DN-0001" /></div>
               <div><Label>Reference #</Label><Input value={referenceNumber} onChange={(e) => setReferenceNumber(e.target.value)} placeholder="Optional" /></div>
               <div><Label>Date <span className="text-error-500">*</span></Label><AppDatePicker value={debitNoteDate} onChange={(val) => setDebitNoteDate(val)} maxToday /></div>
             </div>

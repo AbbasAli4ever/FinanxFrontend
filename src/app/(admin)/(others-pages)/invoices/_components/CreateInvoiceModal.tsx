@@ -357,7 +357,7 @@ const CreateInvoiceModal: React.FC<CreateInvoiceModalProps> = ({
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="max-h-[70vh] overflow-y-auto space-y-6 pr-1">
+        <div className="space-y-6">
           {/* Customer & Invoice Info */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>

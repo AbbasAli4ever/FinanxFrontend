@@ -278,7 +278,6 @@ const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
           invoiceDate: invoiceDate || undefined,
           dueDate: dueDate || undefined,
           paymentTerms: paymentTerms || undefined,
-          invoiceNumber: invoiceNumber || undefined,
           referenceNumber: referenceNumber || undefined,
           discountType: discountType || undefined,
           discountValue: discountValue ? parseFloat(discountValue) : undefined,
@@ -331,7 +330,7 @@ const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="max-h-[70vh] overflow-y-auto space-y-6 pr-1">
+          <div className="space-y-6">
             {/* Customer & Invoice Info */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
@@ -359,7 +358,7 @@ const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
                 <Input
                   id="ei-number"
                   value={invoiceNumber}
-                  onChange={(e) => setInvoiceNumber(e.target.value)}
+                  disabled
                 />
               </div>
 

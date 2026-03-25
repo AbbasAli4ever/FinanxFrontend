@@ -183,7 +183,7 @@ const JournalEntryDetailModal: React.FC<JournalEntryDetailModalProps> = ({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-auto pr-2 space-y-6">
+          <div className="space-y-6">
             {/* Key Details Grid */}
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               <div>

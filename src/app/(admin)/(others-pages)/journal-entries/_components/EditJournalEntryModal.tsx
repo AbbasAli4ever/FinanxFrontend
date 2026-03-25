@@ -180,7 +180,6 @@ const EditJournalEntryModal: React.FC<EditJournalEntryModalProps> = ({
         entryId,
         {
           entryDate,
-          entryNumber: entryNumber || undefined,
           description: description || undefined,
           referenceNumber: referenceNumber || undefined,
           notes: notes || undefined,
@@ -235,12 +234,12 @@ const EditJournalEntryModal: React.FC<EditJournalEntryModalProps> = ({
         </div>
       ) : (
         <>
-          <div className="max-h-[70vh] overflow-y-auto pr-2 space-y-6">
+          <div className="space-y-6">
             {/* Header Fields */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <Label>Entry Number</Label>
-                <Input type="text" value={entryNumber} onChange={(e) => setEntryNumber(e.target.value)} />
+                <Input type="text" value={entryNumber} disabled />
               </div>
               <div>
                 <Label>Entry Date <span className="text-error-500">*</span></Label>

@@ -221,7 +221,6 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
           expenseDate,
           expenseAccountId,
           amount: isMileage || isSplit ? 0 : amount,
-          expenseNumber: expenseNumber || undefined,
           description: description || undefined,
           referenceNumber: referenceNumber || undefined,
           notes: notes || undefined,
@@ -282,12 +281,12 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
         </div>
       ) : (
         <>
-          <div className="max-h-[70vh] overflow-y-auto pr-2 space-y-6">
+          <div className="space-y-6">
             {/* Basic Info */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <Label>Expense Number</Label>
-                <Input type="text" value={expenseNumber} onChange={(e) => setExpenseNumber(e.target.value)} />
+                <Input type="text" value={expenseNumber} disabled />
               </div>
               <div>
                 <Label>Expense Date <span className="text-error-500">*</span></Label>

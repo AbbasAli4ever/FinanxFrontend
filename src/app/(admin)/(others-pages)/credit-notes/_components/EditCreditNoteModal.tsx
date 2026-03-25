@@ -181,7 +181,6 @@ const EditCreditNoteModal: React.FC<EditCreditNoteModalProps> = ({
       await creditNotesService.updateCreditNote(creditNoteId, {
         customerId,
         invoiceId: invoiceId || undefined,
-        creditNoteNumber: creditNoteNumber || undefined,
         referenceNumber: referenceNumber || undefined,
         creditNoteDate,
         discountType: discountType || undefined,
@@ -231,7 +230,7 @@ const EditCreditNoteModal: React.FC<EditCreditNoteModalProps> = ({
               </div>
               <div>
                 <Label>Credit Note #</Label>
-                <Input value={creditNoteNumber} onChange={(e) => setCreditNoteNumber(e.target.value)} placeholder="CN-0001" />
+                <Input value={creditNoteNumber} disabled placeholder="CN-0001" />
               </div>
               <div>
                 <Label>Reference #</Label>

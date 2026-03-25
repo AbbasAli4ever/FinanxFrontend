@@ -190,7 +190,7 @@ const PayslipModal: React.FC<PayslipModalProps> = ({ isOpen, payRunId, itemId, o
   const displayed = itemId ? singlePayslip : payslips[selectedIdx] || null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl mx-4 my-4 max-h-[92vh] overflow-y-auto">
+    <Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl p-6 lg:p-8">
       <div className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">

@@ -141,7 +141,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({ isOpen, onClo
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl mx-4 my-6 max-h-[90vh] overflow-y-auto">
+    <Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl p-6 lg:p-8">
       <div className="p-6">
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Add Employee</h2>

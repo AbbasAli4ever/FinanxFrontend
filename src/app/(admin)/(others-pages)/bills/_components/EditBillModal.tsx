@@ -203,7 +203,7 @@ const EditBillModal: React.FC<EditBillModalProps> = ({
     try {
       await billsService.updateBill(billId, {
         vendorId, billDate: billDate || undefined, dueDate: dueDate || undefined,
-        paymentTerms: paymentTerms || undefined, billNumber: billNumber || undefined,
+        paymentTerms: paymentTerms || undefined,
         vendorInvoiceNumber: vendorInvoiceNumber || undefined, referenceNumber: referenceNumber || undefined,
         discountType: discountType || undefined, discountValue: discountValue ? parseFloat(discountValue) : undefined,
         paymentAccountId: paymentAccountId || undefined, notes: notes || undefined, memo: memo || undefined,
@@ -234,7 +234,7 @@ const EditBillModal: React.FC<EditBillModalProps> = ({
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="max-h-[70vh] overflow-y-auto space-y-6 pr-1">
+          <div className="space-y-6">
             {/* Vendor & Bill Info */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
@@ -245,7 +245,7 @@ const EditBillModal: React.FC<EditBillModalProps> = ({
                   {vendors.map((v) => <option key={v.id} value={v.id}>{v.displayName}{v.email ? ` (${v.email})` : ""}</option>)}
                 </select>
               </div>
-              <div><Label htmlFor="eb-number">Bill Number</Label><Input id="eb-number" value={billNumber} onChange={(e) => setBillNumber(e.target.value)} /></div>
+              <div><Label htmlFor="eb-number">Bill Number</Label><Input id="eb-number" value={billNumber} disabled /></div>
               <div><Label htmlFor="eb-vinv">Vendor Invoice #</Label><Input id="eb-vinv" value={vendorInvoiceNumber} onChange={(e) => setVendorInvoiceNumber(e.target.value)} placeholder="Vendor's reference" /></div>
               <div><Label htmlFor="eb-date">Bill Date <span className="text-error-500">*</span></Label><AppDatePicker id="eb-date" value={billDate} onChange={(val) => setBillDate(val)} maxToday /></div>
               <div>
