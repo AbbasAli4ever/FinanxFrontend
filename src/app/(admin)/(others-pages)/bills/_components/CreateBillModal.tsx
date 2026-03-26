@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Modal } from "@/components/ui/modal";
 import Button from "@/components/ui/button/Button";
 import Label from "@/components/form/Label";
@@ -134,6 +135,8 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
   const [productSearch, setProductSearch] = useState("");
   const [activeProductRow, setActiveProductRow] = useState<number | null>(null);
   const [showProductDropdown, setShowProductDropdown] = useState(false);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const productInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
 
   // Load next bill number when modal opens
   useEffect(() => {
@@ -508,8 +511,9 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
                     const calc = calcLineAmount(item);
                     return (
                       <tr key={item.key} className="border-b border-gray-100 dark:border-gray-800 last:border-0">
-                        <td className="px-3 py-2 relative">
+                        <td className="px-3 py-2">
                           <input
+                            ref={(el) => { if (el) productInputRefs.current.set(index, el); else productInputRefs.current.delete(index); }}
                             type="text"
                             value={activeProductRow === index ? productSearch : item.description}
                             onChange={(e) => {
@@ -523,6 +527,11 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
                               setActiveProductRow(index);
                               setProductSearch(item.description);
                               setShowProductDropdown(true);
+                              const el = productInputRefs.current.get(index);
+                              if (el) {
+                                const rect = el.getBoundingClientRect();
+                                setDropdownPos({ top: rect.bottom + 4, left: rect.left, width: Math.max(rect.width, 288) });
+                              }
                             }}
                             onBlur={() => {
                               setTimeout(() => {
@@ -532,35 +541,13 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
                                   }
                                   setShowProductDropdown(false);
                                   setActiveProductRow(null);
+                                  setDropdownPos(null);
                                 }
                               }, 200);
                             }}
                             placeholder="Search product or type description"
                             className="w-full rounded border-0 bg-transparent px-1 py-1 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none dark:text-white/90 dark:placeholder:text-white/30"
                           />
-                          {activeProductRow === index && showProductDropdown && products.length > 0 && (
-                            <div className="absolute left-0 top-full z-50 mt-1 max-h-48 w-72 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                              {products.map((p) => (
-                                <button
-                                  key={p.id}
-                                  type="button"
-                                  className="flex w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
-                                  onMouseDown={(e) => {
-                                    e.preventDefault();
-                                    selectProduct(index, p);
-                                  }}
-                                >
-                                  <div>
-                                    <p className="font-medium text-gray-900 dark:text-white">{p.name}</p>
-                                    {p.sku && <p className="text-xs text-gray-500">SKU: {p.sku}</p>}
-                                  </div>
-                                  {p.purchaseCost !== null && (
-                                    <span className="text-xs text-gray-500">{formatCurrency(p.purchaseCost)}</span>
-                                  )}
-                                </button>
-                              ))}
-                            </div>
-                          )}
                         </td>
                         <td className="px-3 py-2">
                           <select
@@ -764,6 +751,37 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
           </Button>
         </div>
       </form>
+
+      {showProductDropdown && dropdownPos && products.length > 0 &&
+        createPortal(
+          <div
+            className="fixed z-999999 max-h-48 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
+            style={{ top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width }}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {products.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                className="flex w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  if (activeProductRow !== null) selectProduct(activeProductRow, p);
+                }}
+              >
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">{p.name}</p>
+                  {p.sku && <p className="text-xs text-gray-500">SKU: {p.sku}</p>}
+                </div>
+                {p.purchaseCost !== null && (
+                  <span className="text-xs text-gray-500">{formatCurrency(p.purchaseCost)}</span>
+                )}
+              </button>
+            ))}
+          </div>,
+          document.body
+        )
+      }
     </Modal>
   );
 };
