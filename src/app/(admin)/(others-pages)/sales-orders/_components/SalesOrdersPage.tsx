@@ -49,7 +49,6 @@ const SalesOrdersPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [nextSONumber, setNextSONumber] = useState("SO-0001");
 
   // Loading
   const [summaryLoading, setSummaryLoading] = useState(true);
@@ -93,12 +92,10 @@ const SalesOrdersPage: React.FC = () => {
     Promise.all([
       customersService.getCustomers({ isActive: "true", sortBy: "displayName", sortOrder: "asc" }, token),
       accountsService.getAccounts({ isActive: "true", sortBy: "accountNumber", sortOrder: "asc" }, token),
-      salesOrdersService.getNextNumber(token),
     ])
-      .then(([c, a, nn]) => {
+      .then(([c, a]) => {
         setCustomers(Array.isArray(c) ? c : []);
         setAccounts(Array.isArray(a) ? a : []);
-        setNextSONumber(nn.nextSONumber);
       })
       .catch(() => {})
       .finally(() => setRefLoading(false));
@@ -312,13 +309,9 @@ const SalesOrdersPage: React.FC = () => {
       <CreateSalesOrderModal
         isOpen={createOpen}
         onClose={() => setCreateOpen(false)}
-        onCreated={() => {
-          refresh();
-          salesOrdersService.getNextNumber(token!).then((d) => setNextSONumber(d.nextSONumber)).catch(() => {});
-        }}
+        onCreated={refresh}
         customers={customers}
         accounts={accounts}
-        nextSONumber={nextSONumber}
       />
 
       {/* Edit */}

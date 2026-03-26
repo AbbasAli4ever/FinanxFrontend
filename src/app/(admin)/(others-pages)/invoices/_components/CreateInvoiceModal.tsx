@@ -143,10 +143,6 @@ const CreateInvoiceModal: React.FC<CreateInvoiceModalProps> = ({
       setInvoiceDate(today);
       setDueDate(addDays(today, 30));
 
-      invoicesService.getNextNumber(token).then((res) => {
-        setInvoiceNumber(res.nextInvoiceNumber);
-      }).catch(() => {});
-
       // Load currencies
       currencyService.getList(token).then((list) => {
         setCurrencies(list);
@@ -305,7 +301,7 @@ const CreateInvoiceModal: React.FC<CreateInvoiceModalProps> = ({
           invoiceDate,
           dueDate: dueDate || undefined,
           paymentTerms: paymentTerms || undefined,
-          invoiceNumber: invoiceNumber || undefined,
+          // invoiceNumber is system-generated, not sent in create payload
           referenceNumber: referenceNumber || undefined,
           discountType: discountType || undefined,
           discountValue: discountValue ? parseFloat(discountValue) : undefined,
@@ -388,8 +384,8 @@ const CreateInvoiceModal: React.FC<CreateInvoiceModalProps> = ({
               <Input
                 id="ci-number"
                 value={invoiceNumber}
-                onChange={(e) => setInvoiceNumber(e.target.value)}
                 placeholder="Auto-generated"
+                disabled
               />
             </div>
 

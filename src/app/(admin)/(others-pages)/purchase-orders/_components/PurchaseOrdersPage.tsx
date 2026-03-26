@@ -8,7 +8,6 @@ import { BulkExportButton } from "@/components/export/ExportButton";
 import purchaseOrdersService from "@/services/purchaseOrdersService";
 import vendorsService from "@/services/vendorsService";
 import accountsService from "@/services/accountsService";
-import { formatApiErrorMessage } from "@/utils/apiError";
 import type { POListItem, POSummary, PurchaseOrder } from "@/types/purchaseOrders";
 import type { Vendor } from "@/types/vendors";
 import type { Account } from "@/types/accounts";
@@ -48,7 +47,6 @@ const PurchaseOrdersPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [nextPONumber, setNextPONumber] = useState("PO-0001");
 
   // Loading
   const [summaryLoading, setSummaryLoading] = useState(true);
@@ -90,12 +88,10 @@ const PurchaseOrdersPage: React.FC = () => {
     Promise.all([
       vendorsService.getVendors({ isActive: "true", sortBy: "displayName", sortOrder: "asc" }, token),
       accountsService.getAccounts({ isActive: "true", sortBy: "accountNumber", sortOrder: "asc" }, token),
-      purchaseOrdersService.getNextNumber(token),
     ])
-      .then(([v, a, nn]) => {
+      .then(([v, a]) => {
         setVendors(Array.isArray(v) ? v : []);
         setAccounts(Array.isArray(a) ? a : []);
-        setNextPONumber(nn.nextPONumber);
       })
       .catch(() => {})
       .finally(() => setRefLoading(false));
@@ -307,13 +303,9 @@ const PurchaseOrdersPage: React.FC = () => {
       <CreatePurchaseOrderModal
         isOpen={createOpen}
         onClose={() => setCreateOpen(false)}
-        onCreated={() => {
-          refresh();
-          purchaseOrdersService.getNextNumber(token!).then((d) => setNextPONumber(d.nextPONumber)).catch(() => {});
-        }}
+        onCreated={refresh}
         vendors={vendors}
         accounts={accounts}
-        nextPONumber={nextPONumber}
       />
 
       {/* Edit */}

@@ -82,12 +82,6 @@ const CreateCreditNoteModal: React.FC<CreateCreditNoteModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch next number
-  useEffect(() => {
-    if (!isOpen || !token) return;
-    creditNotesService.getNextNumber(token).then((r) => setCreditNoteNumber(r.nextCreditNoteNumber)).catch(() => {});
-  }, [isOpen, token]);
-
   // Fetch reference data
   useEffect(() => {
     if (!isOpen || !token) return;
@@ -161,7 +155,7 @@ const CreateCreditNoteModal: React.FC<CreateCreditNoteModalProps> = ({
       await creditNotesService.createCreditNote({
         customerId,
         invoiceId: invoiceId || undefined,
-        creditNoteNumber: creditNoteNumber || undefined,
+        // creditNoteNumber is system-generated, not sent in create payload
         referenceNumber: referenceNumber || undefined,
         creditNoteDate,
         discountType: discountType || undefined,
@@ -207,7 +201,7 @@ const CreateCreditNoteModal: React.FC<CreateCreditNoteModalProps> = ({
           </div>
           <div>
             <Label>Credit Note #</Label>
-            <Input value={creditNoteNumber} onChange={(e) => setCreditNoteNumber(e.target.value)} placeholder="CN-0001" />
+            <Input value={creditNoteNumber} placeholder="Auto-generated" disabled />
           </div>
           <div>
             <Label>Reference #</Label>

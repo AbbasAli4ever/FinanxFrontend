@@ -81,11 +81,6 @@ const CreateDebitNoteModal: React.FC<CreateDebitNoteModalProps> = ({
 
   useEffect(() => {
     if (!isOpen || !token) return;
-    debitNotesService.getNextNumber(token).then((r) => setDebitNoteNumber(r.nextDebitNoteNumber)).catch(() => {});
-  }, [isOpen, token]);
-
-  useEffect(() => {
-    if (!isOpen || !token) return;
     accountsService.getAccounts({ isActive: "true", sortBy: "accountNumber", sortOrder: "asc" }, token)
       .then((acc) => setAccountsList(acc.map((a) => ({ id: a.id, name: a.name, accountNumber: a.accountNumber }))))
       .catch(() => {});
@@ -154,7 +149,7 @@ const CreateDebitNoteModal: React.FC<CreateDebitNoteModalProps> = ({
       await debitNotesService.createDebitNote({
         vendorId,
         billId: billId || undefined,
-        debitNoteNumber: debitNoteNumber || undefined,
+        // debitNoteNumber is system-generated, not sent in create payload
         referenceNumber: referenceNumber || undefined,
         debitNoteDate,
         discountType: discountType || undefined,
@@ -196,7 +191,7 @@ const CreateDebitNoteModal: React.FC<CreateDebitNoteModalProps> = ({
           </div>
           <div>
             <Label>Debit Note #</Label>
-            <Input value={debitNoteNumber} onChange={(e) => setDebitNoteNumber(e.target.value)} placeholder="DN-0001" />
+            <Input value={debitNoteNumber} placeholder="Auto-generated" disabled />
           </div>
           <div>
             <Label>Reference #</Label>

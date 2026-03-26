@@ -21,7 +21,6 @@ interface Props {
   onCreated: () => void;
   vendors: Vendor[];
   accounts: Account[];
-  nextPONumber: string;
 }
 
 interface LineItemRow {
@@ -58,13 +57,14 @@ function newRow(): LineItemRow {
 }
 
 const CreatePurchaseOrderModal: React.FC<Props> = ({
-  isOpen, onClose, onCreated, vendors, accounts, nextPONumber,
+  isOpen, onClose, onCreated, vendors, accounts,
 }) => {
   const { token } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [products, setProducts] = useState<ProductListItem[]>([]);
   const [showShipping, setShowShipping] = useState(false);
+  const [poNumber, setPoNumber] = useState("");
 
   // Form fields
   const [vendorId, setVendorId] = useState("");
@@ -129,7 +129,7 @@ const CreatePurchaseOrderModal: React.FC<Props> = ({
   const totalAmount = totalLineAmount - discountAmount;
 
   const resetForm = () => {
-    setVendorId(""); setPoDate(new Date().toISOString().split("T")[0]);
+    setVendorId(""); setPoNumber(""); setPoDate(new Date().toISOString().split("T")[0]);
     setExpectedDeliveryDate(""); setPaymentTerms(""); setReferenceNumber("");
     setDiscountType(""); setDiscountValue(""); setNotes(""); setMemo(""); setVendorMessage("");
     setShippingLine1(""); setShippingLine2(""); setShippingCity(""); setShippingState("");
@@ -150,6 +150,7 @@ const CreatePurchaseOrderModal: React.FC<Props> = ({
     try {
       const payload: CreatePORequest = {
         vendorId, poDate,
+        // poNumber is system-generated, not sent in create payload
         expectedDeliveryDate: expectedDeliveryDate || undefined,
         paymentTerms: paymentTerms || undefined,
         referenceNumber: referenceNumber || undefined,
@@ -195,7 +196,7 @@ const CreatePurchaseOrderModal: React.FC<Props> = ({
         <div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">New Purchase Order</h2>
           <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
-            PO Number: <span className="font-medium text-brand-600 dark:text-brand-400">{nextPONumber}</span>
+            PO Number: {poNumber ? <span className="font-medium text-brand-600 dark:text-brand-400">{poNumber}</span> : <span className="italic text-gray-400">Auto-generated</span>}
           </p>
         </div>
 
@@ -226,6 +227,10 @@ const CreatePurchaseOrderModal: React.FC<Props> = ({
           <div>
             <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Reference Number</label>
             <input type="text" value={referenceNumber} onChange={(e) => setReferenceNumber(e.target.value)} placeholder="e.g. REF-001" className={inputCls} />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number <span className="text-xs text-gray-400">(optional)</span></label>
+            <input type="text" value={poNumber} placeholder="Auto-generated" disabled className={`${inputCls} opacity-60 cursor-not-allowed`} />
           </div>
         </div>
 

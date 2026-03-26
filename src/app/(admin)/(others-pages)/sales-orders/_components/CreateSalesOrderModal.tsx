@@ -21,7 +21,6 @@ interface Props {
   onCreated: () => void;
   customers: Customer[];
   accounts: Account[];
-  nextSONumber: string;
 }
 
 interface LineItemRow {
@@ -57,13 +56,14 @@ function newRow(): LineItemRow {
 }
 
 const CreateSalesOrderModal: React.FC<Props> = ({
-  isOpen, onClose, onCreated, customers, accounts, nextSONumber,
+  isOpen, onClose, onCreated, customers, accounts,
 }) => {
   const { token } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [products, setProducts] = useState<ProductListItem[]>([]);
   const [showShipping, setShowShipping] = useState(false);
+  const [soNumber, setSoNumber] = useState("");
 
   const [customerId, setCustomerId] = useState("");
   const [orderDate, setOrderDate] = useState(new Date().toISOString().split("T")[0]);
@@ -124,7 +124,7 @@ const CreateSalesOrderModal: React.FC<Props> = ({
   const totalAmount = totalLineAmount - discountAmount;
 
   const resetForm = () => {
-    setCustomerId(""); setOrderDate(new Date().toISOString().split("T")[0]);
+    setCustomerId(""); setSoNumber(""); setOrderDate(new Date().toISOString().split("T")[0]);
     setExpectedDeliveryDate(""); setPaymentTerms(""); setReferenceNumber("");
     setDepositAccountId(""); setDiscountType(""); setDiscountValue("");
     setNotes(""); setMemo(""); setCustomerMessage(""); setTermsAndConditions("");
@@ -146,6 +146,7 @@ const CreateSalesOrderModal: React.FC<Props> = ({
     try {
       const payload: CreateSORequest = {
         customerId, orderDate,
+        // soNumber is system-generated, not sent in create payload
         expectedDeliveryDate: expectedDeliveryDate || undefined,
         paymentTerms: paymentTerms || undefined,
         referenceNumber: referenceNumber || undefined,
@@ -190,7 +191,7 @@ const CreateSalesOrderModal: React.FC<Props> = ({
         <div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">New Sales Order</h2>
           <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
-            SO Number: <span className="font-medium text-brand-600 dark:text-brand-400">{nextSONumber}</span>
+            SO Number: {soNumber ? <span className="font-medium text-brand-600 dark:text-brand-400">{soNumber}</span> : <span className="italic text-gray-400">Auto-generated</span>}
           </p>
         </div>
 
@@ -228,6 +229,10 @@ const CreateSalesOrderModal: React.FC<Props> = ({
               <option value="">Select account...</option>
               {accounts.map((a) => <option key={a.id} value={a.id}>{a.accountNumber} - {a.name}</option>)}
             </select>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">SO Number <span className="text-xs text-gray-400">(optional)</span></label>
+            <input type="text" value={soNumber} placeholder="Auto-generated" disabled className={`${inputCls} opacity-60 cursor-not-allowed`} />
           </div>
         </div>
 

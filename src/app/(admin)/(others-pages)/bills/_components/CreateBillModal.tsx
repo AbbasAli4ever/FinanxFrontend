@@ -145,10 +145,6 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
       setBillDate(today);
       setDueDate(addDays(today, 30));
 
-      billsService.getNextNumber(token).then((res) => {
-        setBillNumber(res.nextBillNumber);
-      }).catch(() => {});
-
       // Load currencies
       currencyService.getList(token).then((list) => {
         setCurrencies(list);
@@ -306,7 +302,7 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
           billDate,
           dueDate: dueDate || undefined,
           paymentTerms: paymentTerms || undefined,
-          billNumber: billNumber || undefined,
+          // billNumber is system-generated, not sent in create payload
           vendorInvoiceNumber: vendorInvoiceNumber || undefined,
           referenceNumber: referenceNumber || undefined,
           discountType: discountType || undefined,
@@ -391,8 +387,8 @@ const CreateBillModal: React.FC<CreateBillModalProps> = ({
               <Input
                 id="cb-number"
                 value={billNumber}
-                onChange={(e) => setBillNumber(e.target.value)}
                 placeholder="Auto-generated"
+                disabled
               />
             </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "@/components/ui/modal";
 import Button from "@/components/ui/button/Button";
 import Label from "@/components/form/Label";
@@ -84,19 +84,6 @@ const CreateJournalEntryModal: React.FC<CreateJournalEntryModalProps> = ({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch next number
-  const fetchNextNumber = useCallback(async () => {
-    if (!token) return;
-    try {
-      const data = await journalEntriesService.getNextNumber(token);
-      setEntryNumber(data.nextEntryNumber);
-    } catch { /* non-critical */ }
-  }, [token]);
-
-  useEffect(() => {
-    if (isOpen) fetchNextNumber();
-  }, [isOpen, fetchNextNumber]);
-
   // Auto-toggle recurring/autoReversing based on type
   useEffect(() => {
     if (entryType === "RECURRING") {
@@ -171,7 +158,7 @@ const CreateJournalEntryModal: React.FC<CreateJournalEntryModalProps> = ({
       await journalEntriesService.createJournalEntry(
         {
           entryDate,
-          entryNumber: entryNumber || undefined,
+          // entryNumber is system-generated, not sent in create payload
           description: description || undefined,
           referenceNumber: referenceNumber || undefined,
           notes: notes || undefined,
@@ -242,7 +229,7 @@ const CreateJournalEntryModal: React.FC<CreateJournalEntryModalProps> = ({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <Label>Entry Number</Label>
-            <Input type="text" value={entryNumber} onChange={(e) => setEntryNumber(e.target.value)} placeholder="Auto-generated" />
+            <Input type="text" value={entryNumber} placeholder="Auto-generated" disabled />
           </div>
           <div>
             <Label>Entry Date <span className="text-error-500">*</span></Label>
