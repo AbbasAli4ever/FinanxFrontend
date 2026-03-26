@@ -225,6 +225,35 @@ const reportsService = {
     });
     return response.data;
   },
+  /**
+   * Export a report as PDF or Excel.
+   * Returns a Blob that can be downloaded by the browser.
+   */
+  async exportReport(
+    reportType: string,
+    format: "pdf" | "excel",
+    filters: Record<string, string>,
+    token: string
+  ): Promise<Blob> {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(filters)) {
+      if (value) params.append(key, value);
+    }
+
+    const query = params.toString();
+    const url = `${API_BASE_URL}/reports/${reportType}/export/${format}${query ? `?${query}` : ""}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Export failed: ${response.statusText}`);
+    }
+
+    return response.blob();
+  },
 };
 
 export default reportsService;

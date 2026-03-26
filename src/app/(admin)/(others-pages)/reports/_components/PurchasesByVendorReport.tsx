@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import reportsService from "@/services/reportsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { PurchasesByVendorReport as PurchasesData, PurchasesVendor } from "@/types/reports";
+import ReportExportButtons from "./ReportExportButtons";
 
 function formatCurrency(n: number): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
@@ -219,6 +220,11 @@ const PurchasesByVendorReport: React.FC = () => {
         <Button size="sm" onClick={fetchReport} disabled={loading}>
           {loading ? "Loading..." : "Generate"}
         </Button>
+        <ReportExportButtons
+          reportType="purchases-by-vendor"
+          filters={{ startDate, endDate }}
+          disabled={loading}
+        />
         {data && (
           <Button size="sm" variant="outline" onClick={exportCsv}>Export CSV</Button>
         )}

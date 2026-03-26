@@ -4,8 +4,8 @@ import Alert from "@/components/ui/alert/Alert";
 import Button from "@/components/ui/button/Button";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import { ChevronLeftIcon } from "@/icons";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useState } from "react";
 import { forgotPassword } from "@/services/authService";
 import { formatApiErrorMessage } from "@/utils/apiError";
@@ -41,30 +41,29 @@ export default function ForgotPasswordForm() {
 
   if (submitted) {
     return (
-      <div className="flex flex-col flex-1 w-full overflow-y-auto no-scrollbar">
-        <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-800 shrink-0">
-          <Link href="/signin" className="inline-flex items-center gap-1.5 text-[13px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
-            <ChevronLeftIcon />Back to sign in
-          </Link>
-          <span className="text-[12px] text-gray-400 dark:text-gray-600">FinanX</span>
-        </div>
-        <div className="flex flex-col justify-center flex-1 w-full max-w-[400px] mx-auto px-6 py-10">
-          <div className="rounded-lg border border-success-200 bg-success-50 p-6 dark:border-success-500/30 dark:bg-success-500/10">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded bg-success-100 dark:bg-success-500/20 flex-shrink-0">
-                <svg className="h-4 w-4 text-success-600 dark:text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="flex items-center justify-center min-h-screen px-4 py-12">
+        <div className="w-full max-w-[400px]">
+          <div className="flex flex-col items-center mb-10">
+            <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-lg shadow-brand-200/50 dark:bg-gray-800 dark:shadow-brand-950/30 mb-5">
+              <Image src="/images/logo/f-logo.png" alt="FinanX" width={36} height={36} />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-gray-200/70 bg-white/80 backdrop-blur-xl p-7 sm:p-8 shadow-xl shadow-gray-200/40 dark:border-gray-800/70 dark:bg-gray-900/80 dark:shadow-black/20">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success-100 dark:bg-success-500/20 mb-4">
+                <svg className="h-5 w-5 text-success-600 dark:text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h2 className="text-[15px] font-semibold text-success-900 dark:text-success-100">Check your email</h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Check your email</h2>
+              <p className="text-[13px] text-gray-500 dark:text-gray-400 mb-1">
+                If an account exists with <strong className="text-gray-700 dark:text-gray-300">{email}</strong>, you will receive a password reset link.
+              </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">The link expires in 1 hour.</p>
+              <Link href="/signin" className="w-full">
+                <Button variant="outline" size="md" className="w-full">Back to sign in</Button>
+              </Link>
             </div>
-            <p className="mb-2 text-[13px] text-success-700 dark:text-success-200">
-              If an account exists with <strong>{email}</strong>, you will receive a password reset link.
-            </p>
-            <p className="text-[12px] text-success-600 dark:text-success-300 mb-5">The link expires in 1 hour.</p>
-            <Link href="/signin">
-              <Button variant="outline" size="md" className="w-full">Back to sign in</Button>
-            </Link>
           </div>
         </div>
       </div>
@@ -72,35 +71,47 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <div className="flex flex-col flex-1 w-full overflow-y-auto no-scrollbar">
-      <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-800 shrink-0">
-        <Link href="/signin" className="inline-flex items-center gap-1.5 text-[13px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
-          <ChevronLeftIcon />Back to sign in
-        </Link>
-        <span className="text-[12px] text-gray-400 dark:text-gray-600">FinanX</span>
-      </div>
-      <div className="flex flex-col justify-center flex-1 w-full max-w-[400px] mx-auto px-6 py-10">
-        <div className="mb-7">
-          <h1 className="text-[22px] font-semibold text-gray-900 dark:text-white mb-1.5">Forgot password?</h1>
-          <p className="text-[13px] text-gray-500 dark:text-gray-400">Enter your email and we&apos;ll send a reset link.</p>
+    <div className="flex items-center justify-center min-h-screen px-4 py-12">
+      <div className="w-full max-w-[400px]">
+        {/* Logo */}
+        <div className="flex flex-col items-center mb-10">
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-lg shadow-brand-200/50 dark:bg-gray-800 dark:shadow-brand-950/30 mb-5">
+            <Image src="/images/logo/f-logo.png" alt="FinanX" width={36} height={36} />
+          </div>
+          <h1 className="text-[26px] font-bold text-gray-900 dark:text-white tracking-tight">
+            Forgot password?
+          </h1>
+          <p className="mt-2 text-[14px] text-gray-500 dark:text-gray-400">
+            Enter your email and we&apos;ll send a reset link
+          </p>
         </div>
-        {alert && (
-          <div className="mb-5" role="status" aria-live="polite">
-            <Alert variant={alert.variant} title={alert.title} message={alert.message} />
-          </div>
-        )}
-        <form noValidate onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label>Email Address <span className="text-error-500">*</span></Label>
-            <Input placeholder="you@company.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" disabled={isSubmitting} />
-          </div>
-          <Button type="submit" className="w-full" size="md" disabled={isSubmitting}>
-            {isSubmitting ? "Sending reset link…" : "Send reset link"}
-          </Button>
-        </form>
-        <p className="mt-5 text-[13px] text-center text-gray-500 dark:text-gray-400">
+
+        {/* Card */}
+        <div className="rounded-2xl border border-gray-200/70 bg-white/80 backdrop-blur-xl p-7 sm:p-8 shadow-xl shadow-gray-200/40 dark:border-gray-800/70 dark:bg-gray-900/80 dark:shadow-black/20">
+          {alert && (
+            <div className="mb-5" role="status" aria-live="polite">
+              <Alert variant={alert.variant} title={alert.title} message={alert.message} />
+            </div>
+          )}
+          <form noValidate onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <Label>Email Address <span className="text-error-500">*</span></Label>
+              <Input placeholder="you@company.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" disabled={isSubmitting} />
+            </div>
+            <Button type="submit" className="w-full" size="md" disabled={isSubmitting}>
+              {isSubmitting ? "Sending reset link..." : "Send reset link"}
+            </Button>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <p className="mt-6 text-[13px] text-center text-gray-500 dark:text-gray-400">
           Remember your password?{" "}
           <Link href="/signin" className="text-brand-500 hover:text-brand-600 dark:text-brand-400 font-medium transition-colors">Sign in</Link>
+        </p>
+
+        <p className="mt-5 text-center text-[11px] text-gray-400 dark:text-gray-600">
+          FinanX — Professional Financial Management
         </p>
       </div>
     </div>

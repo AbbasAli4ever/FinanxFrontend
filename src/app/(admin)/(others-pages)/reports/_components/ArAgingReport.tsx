@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import reportsService from "@/services/reportsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { ArAgingReport as ArAgingData, ArAgingCustomer, AgingInvoice } from "@/types/reports";
+import ReportExportButtons from "./ReportExportButtons";
 
 function formatCurrency(n: number): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
@@ -218,6 +219,11 @@ const ArAgingReport: React.FC = () => {
         <Button size="sm" onClick={fetchReport} disabled={loading}>
           {loading ? "Loading..." : "Generate"}
         </Button>
+        <ReportExportButtons
+          reportType="ar-aging"
+          filters={{ asOfDate }}
+          disabled={loading}
+        />
         {data && (
           <Button size="sm" variant="outline" onClick={exportCsv}>
             Export CSV

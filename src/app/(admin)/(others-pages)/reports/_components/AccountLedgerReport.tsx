@@ -17,6 +17,7 @@ import reportsService from "@/services/reportsService";
 import accountsService from "@/services/accountsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { AccountLedgerResponse } from "@/types/reports";
+import ReportExportButtons from "./ReportExportButtons";
 
 const selectClasses =
   "h-11 w-full appearance-none rounded-lg border border-gray-300 px-4 py-2.5 pr-11 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800";
@@ -122,6 +123,11 @@ const AccountLedgerReport: React.FC = () => {
         <Button size="sm" onClick={handleGenerate} disabled={loading}>
           {loading ? "Loading..." : "Generate"}
         </Button>
+        <ReportExportButtons
+          reportType={`account-ledger/${selectedAccountId}`}
+          filters={{ startDate, endDate }}
+          disabled={loading}
+        />
       </div>
 
       {error && <Alert variant="error" title="Error" message={error} />}

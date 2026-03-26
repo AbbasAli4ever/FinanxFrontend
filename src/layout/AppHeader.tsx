@@ -91,7 +91,7 @@ const AppHeader: React.FC = () => {
               Invite User
             </Link>
 
-            <ThemeToggleButton />
+            {/* <ThemeToggleButton /> */}
             <NotificationDropdown />
           </div>
         </div>

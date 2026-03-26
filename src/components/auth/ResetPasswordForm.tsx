@@ -4,8 +4,9 @@ import Alert from "@/components/ui/alert/Alert";
 import Button from "@/components/ui/button/Button";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { validateResetToken, resetPassword } from "@/services/authService";
@@ -16,12 +17,29 @@ type AlertState = { variant: "success" | "error" | "warning"; title: string; mes
 type TokenStatus = "loading" | "valid" | "invalid";
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-const TopNav = ({ back }: { back: string }) => (
-  <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-800 shrink-0">
-    <Link href={back} className="inline-flex items-center gap-1.5 text-[13px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
-      <ChevronLeftIcon />Back to sign in
-    </Link>
-    <span className="text-[12px] text-gray-400 dark:text-gray-600">FinanX</span>
+const LogoBadge = () => (
+  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-lg shadow-brand-200/50 dark:bg-gray-800 dark:shadow-brand-950/30 mb-5">
+    <Image src="/images/logo/f-logo.png" alt="FinanX" width={36} height={36} />
+  </div>
+);
+
+const PageShell = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex items-center justify-center min-h-screen px-4 py-12">
+    <div className="w-full max-w-[400px]">
+      <div className="flex flex-col items-center mb-10">
+        <LogoBadge />
+      </div>
+      {children}
+      <p className="mt-6 text-center text-[11px] text-gray-400 dark:text-gray-600">
+        FinanX — Professional Financial Management
+      </p>
+    </div>
+  </div>
+);
+
+const CardWrapper = ({ children }: { children: React.ReactNode }) => (
+  <div className="rounded-2xl border border-gray-200/70 bg-white/80 backdrop-blur-xl p-7 sm:p-8 shadow-xl shadow-gray-200/40 dark:border-gray-800/70 dark:bg-gray-900/80 dark:shadow-black/20">
+    {children}
   </div>
 );
 
@@ -68,109 +86,117 @@ export default function ResetPasswordForm() {
     } finally { setIsSubmitting(false); }
   };
 
+  // Loading state
   if (tokenStatus === "loading") {
     return (
-      <div className="flex flex-col flex-1 w-full">
-        <TopNav back="/signin" />
-        <div className="flex flex-col justify-center flex-1 w-full max-w-[400px] mx-auto px-6">
-          <div className="text-center">
-            <div className="mb-3 inline-block h-7 w-7 animate-spin rounded-full border-[3px] border-brand-500 border-t-transparent" />
-            <p className="text-[13px] text-gray-500 dark:text-gray-400">Validating your reset link…</p>
+      <PageShell>
+        <CardWrapper>
+          <div className="flex flex-col items-center py-6">
+            <div className="mb-4 h-8 w-8 animate-spin rounded-full border-[3px] border-brand-500 border-t-transparent" />
+            <p className="text-[13px] text-gray-500 dark:text-gray-400">Validating your reset link...</p>
           </div>
-        </div>
-      </div>
+        </CardWrapper>
+      </PageShell>
     );
   }
 
+  // Invalid / expired token
   if (tokenStatus === "invalid") {
     return (
-      <div className="flex flex-col flex-1 w-full overflow-y-auto no-scrollbar">
-        <TopNav back="/signin" />
-        <div className="flex flex-col justify-center flex-1 w-full max-w-[400px] mx-auto px-6 py-10">
-          <div className="rounded-lg border border-error-200 bg-error-50 p-6 dark:border-error-500/30 dark:bg-error-500/10">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded bg-error-100 dark:bg-error-500/20 flex-shrink-0">
-                <svg className="h-4 w-4 text-error-600 dark:text-error-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <h2 className="text-[15px] font-semibold text-error-900 dark:text-error-100">Invalid or expired link</h2>
+      <PageShell>
+        <CardWrapper>
+          <div className="flex flex-col items-center text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-error-100 dark:bg-error-500/20 mb-4">
+              <svg className="h-5 w-5 text-error-600 dark:text-error-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
             </div>
-            <p className="mb-1.5 text-[13px] text-error-700 dark:text-error-200">This password reset link is invalid or has expired.</p>
-            <p className="mb-5 text-[12px] text-error-600 dark:text-error-300">Reset links expire after 1 hour for security reasons.</p>
-            <Link href="/forgot-password">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Invalid or expired link</h2>
+            <p className="text-[13px] text-gray-500 dark:text-gray-400 mb-1.5">This password reset link is invalid or has expired.</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">Reset links expire after 1 hour for security.</p>
+            <Link href="/forgot-password" className="w-full">
               <Button variant="primary" size="md" className="w-full">Request new reset link</Button>
             </Link>
           </div>
-        </div>
-      </div>
+        </CardWrapper>
+      </PageShell>
     );
   }
 
+  // Success state
   if (success) {
     return (
-      <div className="flex flex-col flex-1 w-full overflow-y-auto no-scrollbar">
-        <TopNav back="/signin" />
-        <div className="flex flex-col justify-center flex-1 w-full max-w-[400px] mx-auto px-6 py-10">
-          <div className="rounded-lg border border-success-200 bg-success-50 p-6 dark:border-success-500/30 dark:bg-success-500/10">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded bg-success-100 dark:bg-success-500/20 flex-shrink-0">
-                <svg className="h-4 w-4 text-success-600 dark:text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h2 className="text-[15px] font-semibold text-success-900 dark:text-success-100">Password reset successful</h2>
+      <PageShell>
+        <CardWrapper>
+          <div className="flex flex-col items-center text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success-100 dark:bg-success-500/20 mb-4">
+              <svg className="h-5 w-5 text-success-600 dark:text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-            <p className="mb-1.5 text-[13px] text-success-700 dark:text-success-200">Your password has been changed successfully.</p>
-            <p className="mb-5 text-[12px] text-success-600 dark:text-success-300">Redirecting to sign in…</p>
-            <Link href="/signin">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Password reset successful</h2>
+            <p className="text-[13px] text-gray-500 dark:text-gray-400 mb-1.5">Your password has been changed successfully.</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">Redirecting to sign in...</p>
+            <Link href="/signin" className="w-full">
               <Button variant="primary" size="md" className="w-full">Go to sign in</Button>
             </Link>
           </div>
-        </div>
-      </div>
+        </CardWrapper>
+      </PageShell>
     );
   }
 
+  // Reset form
   return (
-    <div className="flex flex-col flex-1 w-full overflow-y-auto no-scrollbar">
-      <TopNav back="/signin" />
-      <div className="flex flex-col justify-center flex-1 w-full max-w-[400px] mx-auto px-6 py-10">
-        <div className="mb-7">
-          <h1 className="text-[22px] font-semibold text-gray-900 dark:text-white mb-1.5">Reset your password</h1>
-          <p className="text-[13px] text-gray-500 dark:text-gray-400">
-            Resetting password for: <strong className="text-gray-700 dark:text-gray-300">{maskedEmail}</strong>
+    <div className="flex items-center justify-center min-h-screen px-4 py-12">
+      <div className="w-full max-w-[400px]">
+        {/* Logo */}
+        <div className="flex flex-col items-center mb-10">
+          <LogoBadge />
+          <h1 className="text-[26px] font-bold text-gray-900 dark:text-white tracking-tight">
+            Reset your password
+          </h1>
+          <p className="mt-2 text-[14px] text-gray-500 dark:text-gray-400">
+            Resetting for <strong className="text-gray-700 dark:text-gray-300">{maskedEmail}</strong>
           </p>
         </div>
-        {alert && (
-          <div className="mb-5" role="status" aria-live="polite">
-            <Alert variant={alert.variant} title={alert.title} message={alert.message} />
-          </div>
-        )}
-        <form noValidate onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label>New Password <span className="text-error-500">*</span></Label>
-            <div className="relative">
-              <Input placeholder="Enter new password" type={showPassword ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} autoComplete="new-password" disabled={isSubmitting} />
-              <span onClick={() => setShowPassword(!showPassword)} className="absolute z-30 -translate-y-1/2 cursor-pointer right-3 top-1/2 text-gray-400 hover:text-gray-600 transition-colors">
-                {showPassword ? <EyeIcon className="fill-current" /> : <EyeCloseIcon className="fill-current" />}
-              </span>
+
+        {/* Card */}
+        <CardWrapper>
+          {alert && (
+            <div className="mb-5" role="status" aria-live="polite">
+              <Alert variant={alert.variant} title={alert.title} message={alert.message} />
             </div>
-            <p className="mt-1 text-[11px] text-gray-400 dark:text-gray-500">Min 8 chars with uppercase, lowercase, number & special character</p>
-          </div>
-          <div>
-            <Label>Confirm Password <span className="text-error-500">*</span></Label>
-            <div className="relative">
-              <Input placeholder="Confirm new password" type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" disabled={isSubmitting} />
-              <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute z-30 -translate-y-1/2 cursor-pointer right-3 top-1/2 text-gray-400 hover:text-gray-600 transition-colors">
-                {showConfirmPassword ? <EyeIcon className="fill-current" /> : <EyeCloseIcon className="fill-current" />}
-              </span>
+          )}
+          <form noValidate onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <Label>New Password <span className="text-error-500">*</span></Label>
+              <div className="relative">
+                <Input placeholder="Enter new password" type={showPassword ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} autoComplete="new-password" disabled={isSubmitting} />
+                <span onClick={() => setShowPassword(!showPassword)} className="absolute z-30 -translate-y-1/2 cursor-pointer right-3 top-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                  {showPassword ? <EyeIcon className="fill-current" /> : <EyeCloseIcon className="fill-current" />}
+                </span>
+              </div>
+              <p className="mt-1.5 text-[11px] text-gray-400 dark:text-gray-500">Min 8 chars with uppercase, lowercase, number & special character</p>
             </div>
-          </div>
-          <Button type="submit" className="w-full" size="md" disabled={isSubmitting}>
-            {isSubmitting ? "Resetting password…" : "Reset password"}
-          </Button>
-        </form>
+            <div>
+              <Label>Confirm Password <span className="text-error-500">*</span></Label>
+              <div className="relative">
+                <Input placeholder="Confirm new password" type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" disabled={isSubmitting} />
+                <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute z-30 -translate-y-1/2 cursor-pointer right-3 top-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                  {showConfirmPassword ? <EyeIcon className="fill-current" /> : <EyeCloseIcon className="fill-current" />}
+                </span>
+              </div>
+            </div>
+            <Button type="submit" className="w-full" size="md" disabled={isSubmitting}>
+              {isSubmitting ? "Resetting password..." : "Reset password"}
+            </Button>
+          </form>
+        </CardWrapper>
+
+        <p className="mt-6 text-center text-[11px] text-gray-400 dark:text-gray-600">
+          FinanX — Professional Financial Management
+        </p>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import { useAuth } from "@/context/AuthContext";
 import reportsService from "@/services/reportsService";
 import { formatApiErrorMessage } from "@/utils/apiError";
 import type { TrialBalanceResponse, TrialBalanceAccount } from "@/types/reports";
+import ReportExportButtons from "./ReportExportButtons";
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
@@ -103,6 +104,11 @@ const TrialBalanceReport: React.FC = () => {
         <Button size="sm" onClick={fetchReport} disabled={loading}>
           {loading ? "Loading..." : "Generate"}
         </Button>
+        <ReportExportButtons
+          reportType="trial-balance"
+          filters={{ asOfDate }}
+          disabled={loading}
+        />
       </div>
 
       {error && <Alert variant="error" title="Error" message={error} />}

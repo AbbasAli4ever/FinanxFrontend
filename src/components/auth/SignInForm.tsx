@@ -4,8 +4,9 @@ import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Alert from "@/components/ui/alert/Alert";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
@@ -66,101 +67,114 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex flex-col flex-1 w-full">
-      {/* Top nav */}
-      <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100 dark:border-gray-800">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
-          <ChevronLeftIcon />
-          Back to dashboard
-        </Link>
-        <span className="text-[12px] text-gray-400 dark:text-gray-600">FinanX</span>
-      </div>
-
-      {/* Form body */}
-      <div className="flex flex-col justify-center flex-1 w-full max-w-[400px] mx-auto px-6 py-10">
-        {/* Heading */}
-        <div className="mb-7">
-          <h1 className="text-[22px] font-semibold text-gray-900 dark:text-white mb-1.5">Sign in</h1>
-          <p className="text-[13px] text-gray-500 dark:text-gray-400">Enter your credentials to access your account</p>
-        </div>
-
-        {alert && (
-          <div className="mb-5" role="status" aria-live="polite">
-            <Alert variant={alert.variant} title={alert.title} message={alert.message} />
-          </div>
-        )}
-
-        {/* Social buttons */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <button className="flex items-center justify-center gap-2 h-9 rounded border border-gray-200 bg-white text-[13px] text-gray-600 font-medium hover:bg-gray-50 hover:border-gray-300 transition-all duration-150 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-              <path d="M18.7511 10.1944C18.7511 9.47495 18.6915 8.94995 18.5626 8.40552H10.1797V11.6527H15.1003C15.0011 12.4597 14.4654 13.675 13.2749 14.4916L13.2582 14.6003L15.9087 16.6126L16.0924 16.6305C17.7788 15.1041 18.7511 12.8583 18.7511 10.1944Z" fill="#4285F4" />
-              <path d="M10.1788 18.75C12.5895 18.75 14.6133 17.9722 16.0915 16.6305L13.274 14.4916C12.5201 15.0068 11.5081 15.3666 10.1788 15.3666C7.81773 15.3666 5.81379 13.8402 5.09944 11.7305L4.99473 11.7392L2.23868 13.8295L2.20264 13.9277C3.67087 16.786 6.68674 18.75 10.1788 18.75Z" fill="#34A853" />
-              <path d="M5.10014 11.7305C4.91165 11.186 4.80257 10.6027 4.80257 9.99992C4.80257 9.3971 4.91165 8.81379 5.09022 8.26935L5.08523 8.1534L2.29464 6.02954L2.20333 6.0721C1.5982 7.25823 1.25098 8.5902 1.25098 9.99992C1.25098 11.4096 1.5982 12.7415 2.20333 13.9277L5.10014 11.7305Z" fill="#FBBC05" />
-              <path d="M10.1789 4.63331C11.8554 4.63331 12.9864 5.34303 13.6312 5.93612L16.1511 3.525C14.6035 2.11528 12.5895 1.25 10.1789 1.25C6.68676 1.25 3.67088 3.21387 2.20264 6.07218L5.08953 8.26943C5.81381 6.15972 7.81776 4.63331 10.1789 4.63331Z" fill="#EB4335" />
-            </svg>
-            Google
-          </button>
-          <button className="flex items-center justify-center gap-2 h-9 rounded border border-gray-200 bg-white text-[13px] text-gray-600 font-medium hover:bg-gray-50 hover:border-gray-300 transition-all duration-150 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
-            <svg width="14" height="14" viewBox="0 0 21 20" fill="currentColor">
-              <path d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z" />
-            </svg>
-            X (Twitter)
-          </button>
-        </div>
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-          <span className="text-[11px] text-gray-400 dark:text-gray-500 font-medium uppercase tracking-wide">or</span>
-          <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-        </div>
-
-        {/* Form */}
-        <form noValidate onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label>Email <span className="text-error-500">*</span></Label>
-            <Input
-              placeholder="you@company.com"
-              type="email"
-              autoComplete="email"
-              value={formState.email}
-              onChange={handleChange("email")}
+    <div className="flex items-center justify-center min-h-screen px-4 py-12">
+      <div className="w-full max-w-[400px]">
+        {/* Logo */}
+        <div className="flex flex-col items-center mb-10">
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-lg shadow-brand-200/50 dark:bg-gray-800 dark:shadow-brand-950/30 mb-5">
+            <Image
+              src="/images/logo/f-logo.png"
+              alt="FinanX"
+              width={36}
+              height={36}
             />
           </div>
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <Label>Password <span className="text-error-500">*</span></Label>
-              <Link href="/forgot-password" className="text-[12px] text-brand-500 hover:text-brand-600 dark:text-brand-400 transition-colors">
-                Forgot password?
-              </Link>
-            </div>
-            <div className="relative">
-              <Input
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                value={formState.password}
-                autoComplete="current-password"
-                onChange={handleChange("password")}
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute z-30 -translate-y-1/2 cursor-pointer right-3 top-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                {showPassword ? <EyeIcon className="fill-current" /> : <EyeCloseIcon className="fill-current" />}
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <Checkbox checked={isChecked} onChange={setIsChecked} />
-            <span className="text-[13px] text-gray-600 dark:text-gray-400">Keep me logged in</span>
-          </div>
-          <Button type="submit" className="w-full" size="md" disabled={isSubmitting}>
-            {isSubmitting ? "Signing in…" : "Sign in"}
-          </Button>
-        </form>
+          <h1 className="text-[26px] font-bold text-gray-900 dark:text-white tracking-tight">
+            Welcome back
+          </h1>
+          <p className="mt-2 text-[14px] text-gray-500 dark:text-gray-400">
+            Sign in to continue to FinanX
+          </p>
+        </div>
 
-        {/* Sign-up link removed — registration is currently closed. Re-enable for public launch. */}
+        {/* Card */}
+        <div className="rounded-2xl border border-gray-200/70 bg-white/80 backdrop-blur-xl p-7 sm:p-8 shadow-xl shadow-gray-200/40 dark:border-gray-800/70 dark:bg-gray-900/80 dark:shadow-black/20">
+          {alert && (
+            <div className="mb-5" role="status" aria-live="polite">
+              <Alert variant={alert.variant} title={alert.title} message={alert.message} />
+            </div>
+          )}
+
+          <form noValidate onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <Label>Email <span className="text-error-500">*</span></Label>
+              <Input
+                placeholder="you@company.com"
+                type="email"
+                autoComplete="email"
+                value={formState.email}
+                onChange={handleChange("email")}
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <Label>Password <span className="text-error-500">*</span></Label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs text-brand-500 hover:text-brand-600 dark:text-brand-400 transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={formState.password}
+                  autoComplete="current-password"
+                  onChange={handleChange("password")}
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute z-30 -translate-y-1/2 cursor-pointer right-3 top-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                >
+                  {showPassword ? <EyeIcon className="fill-current" /> : <EyeCloseIcon className="fill-current" />}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <Checkbox checked={isChecked} onChange={setIsChecked} />
+              <span className="text-[13px] text-gray-600 dark:text-gray-400">Keep me logged in</span>
+            </div>
+
+            <Button type="submit" className="w-full" size="md" disabled={isSubmitting}>
+              {isSubmitting ? "Signing in..." : "Sign in"}
+            </Button>
+          </form>
+        </div>
+
+        {/* Trust indicators */}
+        <div className="mt-8 flex items-center justify-center gap-6">
+          {[
+            { icon: (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+            ), text: "256-bit SSL" },
+            { icon: (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            ), text: "SOC 2 Ready" },
+            { icon: (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" />
+              </svg>
+            ), text: "99.9% Uptime" },
+          ].map((item) => (
+            <div key={item.text} className="flex items-center gap-1.5 text-gray-400 dark:text-gray-600">
+              <span className="text-brand-400 dark:text-brand-600">{item.icon}</span>
+              <span className="text-[11px] font-medium tracking-wide">{item.text}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-[11px] text-gray-400 dark:text-gray-600">
+          FinanX — Professional Financial Management
+        </p>
       </div>
     </div>
   );
